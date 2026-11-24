@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { sounds } from '../../utils/audio';
+import { forceScrollToTop } from '../../utils/scrollHelper';
 import { AllMissionId } from '../../types';
 import {
   GTA6_FACTS_2026,
@@ -133,6 +134,7 @@ export const LeonidaUniverseHub: React.FC<LeonidaUniverseHubProps> = ({
                 type="button"
                 onClick={() => {
                   sounds.playClick();
+                  forceScrollToTop();
                   setPlayingOpenWorld(true);
                 }}
                 className="px-5 py-3 rounded-xl bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-500 hover:from-fuchsia-500 hover:to-amber-400 text-white font-black text-sm inline-flex items-center gap-2 shadow-lg shadow-fuchsia-600/25 cursor-pointer active:scale-[0.98] whitespace-nowrap shrink-0"
@@ -249,6 +251,7 @@ export const LeonidaUniverseHub: React.FC<LeonidaUniverseHubProps> = ({
               type="button"
               onClick={() => {
                 sounds.playClick();
+                forceScrollToTop();
                 setPlayingOpenWorld(true);
               }}
               className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-fuchsia-600 to-rose-500 hover:from-fuchsia-500 hover:to-rose-400 text-white font-bold text-xs inline-flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap shrink-0"

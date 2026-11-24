@@ -7,7 +7,55 @@ type UpdateListener = (version: string | null) => void;
 let isSessionBusy = false;
 let pendingUpdateVersion: string | null = null;
 let swUpdateRunner: ((reloadPage?: boolean) => Promise<void>) | null = null;
+let isUpdaterInitialized = false;
 const listeners = new Set<UpdateListener>();
+
+const DISMISSED_VER_KEY = 'arky_dismissed_ver';
+const JUST_UPDATED_AT_KEY = 'arky_just_updated_at';
+const JUST_UPDATED_COOLDOWN_MS = 20_000;
+
+function wasRecentlyUpdated(): boolean {
+  try {
+    const raw = sessionStorage.getItem(JUST_UPDATED_AT_KEY);
+    if (!raw) return false;
+    const ts = Number(raw);
+    return Number.isFinite(ts) && Date.now() - ts < JUST_UPDATED_COOLDOWN_MS;
+  } catch {
+    return false;
+  }
+}
+
+function isVersionDismissed(versionLabel: string): boolean {
+  try {
+    return sessionStorage.getItem(DISMISSED_VER_KEY) === versionLabel;
+  } catch {
+    return false;
+  }
+}
+
+function buildSpaSafeReloadUrl(rawHref: string): string {
+  const url = new URL(rawHref);
+  const path = url.pathname.replace(/\/+$/, '') || '/';
+
+  // Paths like /arcade, /duel, /leonida have static SEO index.html snapshots in /public;
+  // reloading onto / or /en/ with query/hash guarantees the live React SPA boots instead of a static HTML page.
+  if (path === '/arcade' && !url.searchParams.has('game') && !url.searchParams.has('arcade')) {
+    url.pathname = '/';
+    url.searchParams.set('arcade', '1');
+  } else if (path === '/duel' && !url.searchParams.has('mode') && !url.searchParams.has('duel')) {
+    url.pathname = '/';
+    url.searchParams.set('duel', '1');
+  } else if (path === '/leonida') {
+    url.pathname = '/';
+    url.searchParams.set('view', 'leonida');
+  } else if (path === '/leonida/en') {
+    url.pathname = '/en/';
+    url.searchParams.set('view', 'leonida');
+  }
+
+  url.searchParams.set('_upd', String(Date.now()));
+  return url.toString();
+}
 
 function notifyListeners(): void {
   for (const listener of listeners) {
@@ -41,7 +89,7 @@ export function setAppSessionBusy(busy: boolean): void {
 export function dismissPendingAppUpdateForNow(): void {
   try {
     if (pendingUpdateVersion) {
-      sessionStorage.setItem('arky_dismissed_ver', pendingUpdateVersion);
+      sessionStorage.setItem(DISMISSED_VER_KEY, pendingUpdateVersion);
     }
   } catch {
     // Ignore storage errors
@@ -51,6 +99,14 @@ export function dismissPendingAppUpdateForNow(): void {
 }
 
 export async function applyPendingAppUpdate(): Promise<void> {
+  try {
+    sessionStorage.setItem(JUST_UPDATED_AT_KEY, String(Date.now()));
+  } catch {
+    // Ignore storage errors
+  }
+  pendingUpdateVersion = null;
+  notifyListeners();
+
   if (swUpdateRunner) {
     try {
       await swUpdateRunner(false);
@@ -63,6 +119,12 @@ export async function applyPendingAppUpdate(): Promise<void> {
 
 export async function clearCachesAndReloadLatest(): Promise<void> {
   if (typeof window === 'undefined') return;
+
+  try {
+    sessionStorage.setItem(JUST_UPDATED_AT_KEY, String(Date.now()));
+  } catch {
+    // Ignore storage errors
+  }
 
   try {
     if ('caches' in window) {
@@ -92,21 +154,15 @@ export async function clearCachesAndReloadLatest(): Promise<void> {
   }
 
   try {
-    const url = new URL(window.location.href);
-    url.searchParams.set('_upd', String(Date.now()));
-    window.location.replace(url.toString());
+    window.location.replace(buildSpaSafeReloadUrl(window.location.href));
   } catch {
     window.location.reload();
   }
 }
 
 function handleDetectedNewVersion(versionLabel: string): void {
-  try {
-    if (sessionStorage.getItem('arky_dismissed_ver') === versionLabel) {
-      return;
-    }
-  } catch {
-    // Ignore storage errors
+  if (wasRecentlyUpdated() || isVersionDismissed(versionLabel)) {
+    return;
   }
 
   if (isSessionBusy) {
@@ -132,7 +188,14 @@ function handleDetectedNewVersion(versionLabel: string): void {
 }
 
 export function initAppAutoUpdater(): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || isUpdaterInitialized) return;
+  isUpdaterInitialized = true;
+
+  // Capture whether a SW was ALREADY controlling this page before registering.
+  // In Incognito or brand-new sessions, controller starts as null; the initial clients.claim()
+  // activates the current build and must NOT be mistaken for a new update.
+  let hadController =
+    'serviceWorker' in navigator && Boolean(navigator.serviceWorker.controller);
 
   // Recover seamlessly if an open tab tries to load a deleted chunk after a new deploy
   window.addEventListener('vite:preloadError', (event) => {
@@ -153,10 +216,13 @@ export function initAppAutoUpdater(): void {
     }
   });
 
-  // Register Service Worker with immediate activation and frequent checks
+  // Register Service Worker with immediate activation and periodic checks
   swUpdateRunner = registerSW({
     immediate: true,
     onNeedRefresh() {
+      if (wasRecentlyUpdated() || isVersionDismissed('sw-refresh')) {
+        return;
+      }
       if (isSessionBusy) {
         pendingUpdateVersion = 'sw-refresh';
         notifyListeners();
@@ -179,10 +245,17 @@ export function initAppAutoUpdater(): void {
     },
   });
 
-  // Reload once when a new service worker takes control, unless user is in an active session
+  // Reload once only when replacing an EXISTING controlling service worker during an open session
   let isRefreshing = false;
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hadController) {
+        hadController = true;
+        return;
+      }
+      if (wasRecentlyUpdated() || isVersionDismissed('sw-controller')) {
+        return;
+      }
       if (isSessionBusy) {
         pendingUpdateVersion = 'sw-controller';
         notifyListeners();

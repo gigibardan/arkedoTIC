@@ -16,6 +16,8 @@ import {
   Radio,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  ChevronDown,
   Users,
   Lock,
   Unlock,
@@ -311,7 +313,7 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
   // Mutable 60fps simulation refs
   const playerRef = useRef({
     x: CANVAS_W / 2,
-    y: CANVAS_H - 74,
+    y: CANVAS_H - 96,
     vx: 0,
     speed: 6.2,
     nitro: 100,
@@ -352,6 +354,7 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
     down: false,
     nitro: false,
     pointerX: CANVAS_W / 2,
+    pointerY: CANVAS_H - 96,
     pointerActive: false,
   });
 
@@ -564,12 +567,13 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
 
   const handleStartNewGame = (startHero: HeroId = hero) => {
     sounds.playClick();
+    forceScrollToTop();
     setHero(startHero);
     heroRef.current = startHero;
 
     playerRef.current = {
       x: CANVAS_W / 2,
-      y: CANVAS_H - 74,
+      y: CANVAS_H - 96,
       vx: 0,
       speed: 6.4,
       nitro: 100,
@@ -579,6 +583,16 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
       jasonShieldTimer: 0,
       jasonShieldReady: true,
       tilt: 0,
+    };
+    inputRef.current = {
+      left: false,
+      right: false,
+      up: false,
+      down: false,
+      nitro: false,
+      pointerX: CANVAS_W / 2,
+      pointerY: CANVAS_H - 96,
+      pointerActive: false,
     };
     simRef.current = {
       score: 0,
@@ -657,12 +671,13 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
     };
   }, [gameState, handleSwapHero, triggerEmpBlast]);
 
-  // Canvas Pointer Drag Steer
+  // Canvas Pointer Drag Steer (2D: Horizontal + Vertical)
   const updatePointerSteer = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const c = canvasRef.current;
     if (!c) return;
     const rect = c.getBoundingClientRect();
     inputRef.current.pointerX = ((e.clientX - rect.left) / rect.width) * CANVAS_W;
+    inputRef.current.pointerY = ((e.clientY - rect.top) / rect.height) * CANVAS_H;
   };
 
   // Main 60 FPS Canvas Loop
@@ -747,7 +762,17 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
       }
 
       const heatStarsNow = Math.min(5, Math.max(1, Math.floor(sim.heat)));
-      const targetSpeed = (wantNitro ? 10.2 : inputRef.current.up ? 7.6 : inputRef.current.down ? 4.4 : 6.2) + heatStarsNow * 0.38;
+      const pointerUp = inputRef.current.pointerActive && inputRef.current.pointerY < p.y - 18;
+      const pointerDown = inputRef.current.pointerActive && inputRef.current.pointerY > p.y + 18;
+      const targetSpeed =
+        (wantNitro
+          ? 10.2
+          : inputRef.current.up || pointerUp
+          ? 7.6
+          : inputRef.current.down || pointerDown
+          ? 4.4
+          : 6.2) +
+        heatStarsNow * 0.38;
       p.speed += (targetSpeed - p.speed) * 0.1 * dt;
 
       // Steering (Keyboard + Touch Pointer)
@@ -767,10 +792,17 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
       p.x = Math.max(ROAD_LEFT + 22, Math.min(ROAD_LEFT + ROAD_WIDTH - 22, p.x));
       p.tilt = p.vx * 0.045;
 
-      // Vertical mobility
-      if (inputRef.current.up) p.y = Math.max(240, p.y - 2.2 * dt);
-      else if (inputRef.current.down) p.y = Math.min(CANVAS_H - 48, p.y + 2.2 * dt);
-      else p.y += (CANVAS_H - 74 - p.y) * 0.06 * dt;
+      // Vertical mobility (Keyboard + 4-way Touch + Canvas Touch Drag)
+      if (inputRef.current.up) {
+        p.y = Math.max(200, p.y - 2.6 * dt);
+      } else if (inputRef.current.down) {
+        p.y = Math.min(CANVAS_H - 48, p.y + 2.6 * dt);
+      } else if (inputRef.current.pointerActive) {
+        const targetY = Math.max(200, Math.min(CANVAS_H - 48, inputRef.current.pointerY));
+        p.y += (targetY - p.y) * 0.16 * dt;
+      } else {
+        p.y += (CANVAS_H - 96 - p.y) * 0.06 * dt;
+      }
 
       // Distance & Sector Progression
       sim.roadOffset = (sim.roadOffset + p.speed * dt) % 64;
@@ -1311,29 +1343,29 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
   const binaryValue = binaryBits.reduce((acc, bit, idx) => acc + bit * Math.pow(2, 3 - idx), 0);
 
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-col gap-4 select-none">
+    <div className="w-full max-w-5xl mx-auto flex flex-col gap-2.5 sm:gap-4 select-none pb-4">
       {/* Top Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/95 border border-fuchsia-500/40 rounded-2xl px-4 py-3 shadow-xl">
-        <div className="flex items-center gap-3 min-w-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 bg-slate-900/95 border border-fuchsia-500/40 rounded-2xl px-3 py-2 sm:px-4 sm:py-3 shadow-xl">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             type="button"
             onClick={() => {
               sounds.playClick();
               onBack();
             }}
-            className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap"
+            className="min-h-[36px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer shrink-0 whitespace-nowrap"
           >
             <ArrowLeft className="w-4 h-4 text-fuchsia-400" />
-            <span>{isEn ? 'Arcade Hub' : 'Înapoi la Arcade'}</span>
+            <span>{isEn ? 'Arcade' : 'Înapoi'}</span>
           </button>
           <div className="min-w-0">
-            <h1 className="text-base sm:text-xl font-black text-white font-heading truncate flex items-center gap-2">
-              <span>🌴 Vice Leonida VI: Cyber Runner</span>
-              <span className="px-2 py-0.5 rounded-md bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-400/40 text-[10px] font-mono uppercase">
+            <h1 className="text-sm sm:text-xl font-black text-white font-heading truncate flex items-center gap-1.5 sm:gap-2">
+              <span className="truncate">🌴 Vice Leonida VI</span>
+              <span className="hidden xs:inline-block px-2 py-0.5 rounded-md bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-400/40 text-[10px] font-mono uppercase shrink-0">
                 GTA 6 TECH
               </span>
             </h1>
-            <p className="text-[11px] text-slate-400 truncate">
+            <p className="hidden sm:block text-[11px] text-slate-400 truncate">
               {isEn
                 ? 'Vice Beach · Venetian Causeway · Port Gellhorn · Grassrivers Airboat'
                 : 'Vice Beach · Venetian Causeway · Port Gellhorn · Mlaștinile Grassrivers'}
@@ -1341,16 +1373,16 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <div className="px-3 py-1.5 rounded-xl bg-slate-950 border border-amber-500/40 text-xs font-mono text-amber-300 flex items-center gap-1.5 tabular-nums">
-            <Trophy className="w-4 h-4 text-amber-400" />
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-950 border border-amber-500/40 text-[11px] sm:text-xs font-mono text-amber-300 flex items-center gap-1 tabular-nums">
+            <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
             <span>PB: {highScore.toLocaleString()}</span>
           </div>
           {gameState === 'playing' && (
             <button
               type="button"
               onClick={() => setGameState('paused')}
-              className="min-h-[38px] px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+              className="min-h-[36px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
             >
               <Pause className="w-4 h-4" />
               <span className="hidden sm:inline">{isEn ? 'Pause' : 'Pauză'}</span>
@@ -1360,43 +1392,43 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
             type="button"
             onClick={() => setMuted((m) => !m)}
             aria-label={muted ? 'Unmute' : 'Mute'}
-            className="min-w-[38px] min-h-[38px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center cursor-pointer"
+            className="min-w-[36px] min-h-[36px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center justify-center cursor-pointer"
           >
             {muted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-cyan-400" />}
           </button>
         </div>
       </div>
 
-      {/* Leonida HUD Telemetry Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 bg-slate-900/90 border border-slate-800 rounded-2xl p-3 text-xs font-mono">
-        <div className="bg-slate-950 rounded-xl px-3 py-2 border border-slate-800 flex items-center justify-between tabular-nums">
-          <span className="text-slate-400">{isEn ? 'SCORE' : 'SCOR'}</span>
-          <strong className="text-cyan-300 text-sm font-black">{score.toLocaleString()}</strong>
+      {/* Leonida HUD Telemetry Strip — Compact on Mobile */}
+      <div className="grid grid-cols-4 sm:grid-cols-5 gap-1.5 sm:gap-2.5 bg-slate-900/90 border border-slate-800 rounded-2xl p-2 sm:p-3 text-[11px] sm:text-xs font-mono">
+        <div className="bg-slate-950 rounded-xl px-2 sm:px-3 py-1.5 sm:py-2 border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between tabular-nums">
+          <span className="text-[9px] sm:text-xs text-slate-400">{isEn ? 'SCORE' : 'SCOR'}</span>
+          <strong className="text-cyan-300 text-xs sm:text-sm font-black truncate">{score.toLocaleString()}</strong>
         </div>
 
-        <div className="bg-slate-950 rounded-xl px-3 py-2 border border-slate-800 flex items-center justify-between tabular-nums">
-          <span className="text-slate-400">{isEn ? 'HEAT' : 'ALERTE'}</span>
-          <span className="text-amber-400 font-black tracking-tight">
+        <div className="bg-slate-950 rounded-xl px-2 sm:px-3 py-1.5 sm:py-2 border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between tabular-nums">
+          <span className="text-[9px] sm:text-xs text-slate-400">{isEn ? 'HEAT' : 'ALERTE'}</span>
+          <span className="text-amber-400 font-black tracking-tight text-[11px] sm:text-xs">
             {'★'.repeat(heatStars)}
             <span className="text-slate-700">{'★'.repeat(5 - heatStars)}</span>
           </span>
         </div>
 
-        <div className="bg-slate-950 rounded-xl px-3 py-2 border border-slate-800 flex items-center justify-between tabular-nums">
-          <span className="text-slate-400">{isEn ? 'HULL' : 'SCUT'}</span>
-          <div className="flex items-center gap-1">
+        <div className="bg-slate-950 rounded-xl px-2 sm:px-3 py-1.5 sm:py-2 border border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between tabular-nums">
+          <span className="text-[9px] sm:text-xs text-slate-400">{isEn ? 'HULL' : 'SCUT'}</span>
+          <div className="flex items-center gap-0.5 sm:gap-1 mt-0.5 sm:mt-0">
             {[0, 1, 2, 3].slice(0, Math.max(3, hull)).map((idx) => (
               <Heart
                 key={idx}
-                className={`w-4 h-4 ${idx < hull ? 'text-rose-500 fill-rose-500' : 'text-slate-700'}`}
+                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${idx < hull ? 'text-rose-500 fill-rose-500' : 'text-slate-700'}`}
               />
             ))}
           </div>
         </div>
 
-        <div className="bg-slate-950 rounded-xl px-3 py-2 border border-slate-800 flex flex-col justify-center gap-1 tabular-nums">
-          <div className="flex justify-between text-[10px]">
-            <span className="text-cyan-400 font-bold">NITRO</span>
+        <div className="bg-slate-950 rounded-xl px-2 sm:px-3 py-1.5 sm:py-2 border border-slate-800 flex flex-col justify-center gap-1 tabular-nums">
+          <div className="flex justify-between text-[9px] sm:text-[10px]">
+            <span className="text-cyan-400 font-bold">N2O</span>
             <span className="text-white">{nitroPct}%</span>
           </div>
           <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
@@ -1404,7 +1436,7 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
           </div>
         </div>
 
-        <div className="col-span-2 sm:col-span-1 bg-slate-950 rounded-xl px-3 py-2 border border-slate-800 flex items-center justify-between gap-2">
+        <div className="hidden sm:flex bg-slate-950 rounded-xl px-3 py-2 border border-slate-800 items-center justify-between gap-2">
           <span className="text-slate-400 text-[10px]">DIST / VAULT</span>
           <strong className="text-emerald-300 tabular-nums">{distanceM}m · {vaultsCracked}🔓</strong>
         </div>
@@ -1413,9 +1445,9 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
       {/* Main Canvas + Overlay Container */}
       <div className="relative bg-slate-950 border-2 border-fuchsia-500/40 rounded-3xl overflow-hidden shadow-2xl">
         {/* Live Leonida NetFeed Ticker */}
-        <div className="bg-gradient-to-r from-fuchsia-950/90 via-slate-900 to-cyan-950/90 border-b border-fuchsia-500/30 px-4 py-1.5 flex items-center gap-2 text-[11px] font-mono">
+        <div className="bg-gradient-to-r from-fuchsia-950/90 via-slate-900 to-cyan-950/90 border-b border-fuchsia-500/30 px-3 sm:px-4 py-1.5 flex items-center gap-2 text-[10px] sm:text-[11px] font-mono">
           <Radio className="w-3.5 h-3.5 text-fuchsia-400 shrink-0" />
-          <span className="text-fuchsia-300 font-black shrink-0">LEONIDA NETFEED:</span>
+          <span className="text-fuchsia-300 font-black shrink-0">NETFEED:</span>
           <span className="text-slate-200 truncate">{netFeed}</span>
         </div>
 
@@ -1425,31 +1457,37 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
             width={CANVAS_W}
             height={CANVAS_H}
             onPointerDown={(e) => {
+              e.currentTarget.setPointerCapture(e.pointerId);
               inputRef.current.pointerActive = true;
               updatePointerSteer(e);
             }}
             onPointerMove={(e) => {
               if (inputRef.current.pointerActive) updatePointerSteer(e);
             }}
-            onPointerUp={() => {
+            onPointerUp={(e) => {
+              if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+                e.currentTarget.releasePointerCapture(e.pointerId);
+              }
               inputRef.current.pointerActive = false;
             }}
-            onPointerLeave={() => {
+            onPointerCancel={() => {
               inputRef.current.pointerActive = false;
             }}
-            className="w-full max-w-3xl aspect-[4/3] block touch-none cursor-crosshair"
+            className={`${
+              gameState === 'playing' ? 'block' : 'hidden sm:block'
+            } w-full max-w-3xl aspect-[4/3] touch-none cursor-crosshair`}
           />
 
-          {/* TITLE MENU OVERLAY */}
+          {/* TITLE MENU OVERLAY (In-flow on mobile so nothing is clipped or stuck scrolling upward) */}
           {gameState === 'menu' && (
-            <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-md p-4 sm:p-8 flex flex-col items-center justify-center text-center overflow-y-auto">
-              <div className="max-w-xl w-full space-y-5">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fuchsia-500/20 border border-fuchsia-400/40 text-fuchsia-300 text-xs font-mono font-bold">
+            <div className="relative sm:absolute sm:inset-0 w-full bg-slate-950/95 backdrop-blur-md p-4 sm:p-6 flex flex-col items-center justify-start sm:justify-center text-center sm:overflow-y-auto">
+              <div className="max-w-xl w-full space-y-3.5 sm:space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fuchsia-500/20 border border-fuchsia-400/40 text-fuchsia-300 text-[11px] sm:text-xs font-mono font-bold">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>{isEn ? 'STATE OF LEONIDA · CYBER COURIER' : 'STATUL LEONIDA · MISIUNE CYBER-COURIER'}</span>
                 </div>
 
-                <h2 className="text-2xl sm:text-4xl font-black text-white font-heading tracking-tight">
+                <h2 className="text-xl sm:text-3xl font-black text-white font-heading tracking-tight">
                   Vice Leonida VI: <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 via-amber-300 to-cyan-400">Cyber Runner</span>
                 </h2>
 
@@ -1460,11 +1498,11 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
                 </p>
 
                 {/* Choose Starting Hero */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 text-left">
                   <button
                     type="button"
                     onClick={() => setHero('lucia')}
-                    className={`p-3.5 rounded-2xl border-2 transition cursor-pointer ${
+                    className={`p-3 rounded-2xl border-2 transition cursor-pointer ${
                       hero === 'lucia'
                         ? 'bg-fuchsia-950/70 border-fuchsia-400 shadow-lg shadow-fuchsia-500/20'
                         : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
@@ -1484,7 +1522,7 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
                   <button
                     type="button"
                     onClick={() => setHero('jason')}
-                    className={`p-3.5 rounded-2xl border-2 transition cursor-pointer ${
+                    className={`p-3 rounded-2xl border-2 transition cursor-pointer ${
                       hero === 'jason'
                         ? 'bg-amber-950/70 border-amber-400 shadow-lg shadow-amber-500/20'
                         : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
@@ -1502,8 +1540,8 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
                   </button>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-mono text-slate-400">
-                  <span>[A/D / ◀▶] Steer</span>
+                <div className="hidden sm:flex flex-wrap items-center justify-center gap-2 text-[11px] font-mono text-slate-400">
+                  <span>[WASD / ◀▲▼▶] Move</span>
                   <span>•</span>
                   <span>[SPACE] Nitro</span>
                   <span>•</span>
@@ -1515,7 +1553,7 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
                 <button
                   type="button"
                   onClick={() => handleStartNewGame(hero)}
-                  className="w-full sm:w-auto min-h-[48px] px-8 py-3 rounded-2xl bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-500 hover:from-fuchsia-500 hover:to-amber-400 text-white font-black text-sm tracking-wide shadow-xl shadow-fuchsia-600/30 inline-flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                  className="w-full sm:w-auto min-h-[46px] px-8 py-3 rounded-2xl bg-gradient-to-r from-fuchsia-600 via-rose-500 to-amber-500 hover:from-fuchsia-500 hover:to-amber-400 text-white font-black text-sm tracking-wide shadow-xl shadow-fuchsia-600/30 inline-flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                 >
                   <Play className="w-5 h-5 fill-white" />
                   <span>{isEn ? 'LAUNCH LEONIDA RUN 🚀' : 'PORNEȘTE CURSA LEONIDA 🚀'}</span>
@@ -1526,7 +1564,7 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
 
           {/* PAUSE OVERLAY */}
           {gameState === 'paused' && (
-            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center gap-4 p-6 text-center">
+            <div className="relative sm:absolute sm:inset-0 w-full bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center gap-4 p-6 text-center min-h-[260px]">
               <h3 className="text-2xl font-black text-white font-heading">
                 {isEn ? 'MISSION PAUSED' : 'MISIUNE ÎN PAUZĂ'}
               </h3>
@@ -1556,8 +1594,8 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
 
           {/* INTERACTIVE RELAY VAULT HACK OVERLAY */}
           {gameState === 'hack' && activePuzzle && (
-            <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-4 sm:p-6 text-center overflow-y-auto">
-              <div className="max-w-md w-full bg-slate-900 border-2 border-purple-400/70 rounded-3xl p-5 shadow-2xl space-y-4">
+            <div className="relative sm:absolute sm:inset-0 w-full bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-start sm:justify-center p-4 sm:p-6 text-center sm:overflow-y-auto">
+              <div className="max-w-md w-full bg-slate-900 border-2 border-purple-400/70 rounded-3xl p-4 sm:p-5 shadow-2xl space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-300 text-[11px] font-mono font-bold flex items-center gap-1.5">
                     <Lock className="w-3.5 h-3.5" />
@@ -1639,8 +1677,8 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
 
           {/* GAME OVER OVERLAY */}
           {gameState === 'gameover' && (
-            <div className="absolute inset-0 bg-slate-950/92 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-              <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-6 shadow-2xl space-y-4">
+            <div className="relative sm:absolute sm:inset-0 w-full bg-slate-950/92 backdrop-blur-md flex flex-col items-center justify-start sm:justify-center p-4 sm:p-6 text-center">
+              <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/50 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-4">
                 <span className="px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-mono font-bold">
                   {isEn ? 'TRANSMISSION INTERRUPTED' : 'TRANSMISIE ÎNTRERUPTĂ'}
                 </span>
@@ -1688,65 +1726,115 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
           )}
         </div>
 
-        {/* Ergonomic Bottom Tactical & Touch Controls Bar */}
-        <div className="bg-slate-900/95 border-t border-slate-800 px-3 py-3 flex flex-wrap items-center justify-between gap-2.5">
-          {/* Touch Steer Left / Right */}
-          <div className="flex items-center gap-2">
+        {/* Ergonomic Bottom Tactical & 4-Way Touch Controls Bar */}
+        <div className="bg-slate-900/95 border-t border-slate-800 px-3 py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2">
+          {/* 4-Way Touch D-Pad (Left / Up / Down / Right) */}
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
-              onPointerDown={() => { inputRef.current.left = true; }}
-              onPointerUp={() => { inputRef.current.left = false; }}
-              onPointerLeave={() => { inputRef.current.left = false; }}
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture(e.pointerId);
+                inputRef.current.left = true;
+              }}
+              onPointerUp={(e) => {
+                if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                inputRef.current.left = false;
+              }}
+              onPointerCancel={() => { inputRef.current.left = false; }}
               aria-label="Steer Left"
-              className="w-12 h-11 rounded-xl bg-slate-800 active:bg-cyan-600 border border-slate-700 text-white flex items-center justify-center cursor-pointer"
+              className="w-11 h-11 rounded-xl bg-slate-800 active:bg-cyan-600 border border-slate-700 text-white flex items-center justify-center cursor-pointer touch-none"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               type="button"
-              onPointerDown={() => { inputRef.current.right = true; }}
-              onPointerUp={() => { inputRef.current.right = false; }}
-              onPointerLeave={() => { inputRef.current.right = false; }}
-              aria-label="Steer Right"
-              className="w-12 h-11 rounded-xl bg-slate-800 active:bg-cyan-600 border border-slate-700 text-white flex items-center justify-center cursor-pointer"
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture(e.pointerId);
+                inputRef.current.up = true;
+              }}
+              onPointerUp={(e) => {
+                if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                inputRef.current.up = false;
+              }}
+              onPointerCancel={() => { inputRef.current.up = false; }}
+              aria-label={isEn ? 'Move Up / Accelerate' : 'Urci / Accelerează'}
+              className="w-11 h-11 rounded-xl bg-emerald-700/90 active:bg-emerald-500 border border-emerald-500/60 text-white flex items-center justify-center cursor-pointer touch-none"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronUp className="w-5 h-5" />
+            </button>
+            <button
+              type="button"
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture(e.pointerId);
+                inputRef.current.down = true;
+              }}
+              onPointerUp={(e) => {
+                if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                inputRef.current.down = false;
+              }}
+              onPointerCancel={() => { inputRef.current.down = false; }}
+              aria-label={isEn ? 'Move Down / Brake' : 'Coboară / Frână'}
+              className="w-11 h-11 rounded-xl bg-slate-800 active:bg-rose-600 border border-slate-700 text-white flex items-center justify-center cursor-pointer touch-none"
+            >
+              <ChevronDown className="w-5 h-5" />
+            </button>
+            <button
+              type="button"
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture(e.pointerId);
+                inputRef.current.right = true;
+              }}
+              onPointerUp={(e) => {
+                if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                inputRef.current.right = false;
+              }}
+              onPointerCancel={() => { inputRef.current.right = false; }}
+              aria-label="Steer Right"
+              className="w-11 h-11 rounded-xl bg-slate-800 active:bg-cyan-600 border border-slate-700 text-white flex items-center justify-center cursor-pointer touch-none"
+            >
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
 
           {/* Hero Switch + EMP + Nitro Buttons */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             <button
               type="button"
               onClick={handleSwapHero}
               disabled={gameState !== 'playing'}
-              className={`min-h-[42px] px-3 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-40 ${
+              className={`min-h-[42px] px-2.5 sm:px-3 py-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-40 ${
                 hero === 'lucia'
                   ? 'bg-fuchsia-950/90 border-fuchsia-400 text-fuchsia-200'
                   : 'bg-amber-950/90 border-amber-400 text-amber-200'
               }`}
             >
               <Users className="w-4 h-4 shrink-0" />
-              <span>{hero === 'lucia' ? 'Lucia [Q]' : 'Jason [Q]'}</span>
+              <span>{hero === 'lucia' ? 'Lucia' : 'Jason'}</span>
             </button>
 
             <button
               type="button"
               onClick={triggerEmpBlast}
               disabled={gameState !== 'playing' || empPct < 100}
-              className="min-h-[42px] px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-500 text-white text-xs font-black flex items-center gap-1.5 cursor-pointer tabular-nums"
+              className="min-h-[42px] px-2.5 sm:px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-500 text-white text-xs font-black flex items-center gap-1 cursor-pointer tabular-nums"
             >
               <Zap className="w-4 h-4 shrink-0" />
-              <span>EMP {empPct}% [E]</span>
+              <span>EMP {empPct}%</span>
             </button>
 
             <button
               type="button"
-              onPointerDown={() => { inputRef.current.nitro = true; }}
-              onPointerUp={() => { inputRef.current.nitro = false; }}
-              onPointerLeave={() => { inputRef.current.nitro = false; }}
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture(e.pointerId);
+                inputRef.current.nitro = true;
+              }}
+              onPointerUp={(e) => {
+                if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                inputRef.current.nitro = false;
+              }}
+              onPointerCancel={() => { inputRef.current.nitro = false; }}
               disabled={gameState !== 'playing'}
-              className="min-h-[42px] px-4 py-2 rounded-xl bg-gradient-to-r from-fuchsia-600 to-amber-500 active:scale-95 text-white text-xs font-black flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
+              className="min-h-[42px] px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-fuchsia-600 to-amber-500 active:scale-95 text-white text-xs font-black flex items-center gap-1 cursor-pointer disabled:opacity-40 touch-none"
             >
               <Flame className="w-4 h-4 shrink-0" />
               <span>NITRO</span>
@@ -1756,13 +1844,13 @@ export const ViceLeonidaCyberRun: React.FC<ViceLeonidaCyberRunProps> = ({
       </div>
 
       {/* Educational Footer Strip */}
-      <div className="bg-slate-900/75 border border-slate-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+      <div className="bg-slate-900/75 border border-slate-800 rounded-2xl p-3 sm:p-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300">
         <div className="flex items-center gap-2">
           <Cpu className="w-4 h-4 text-fuchsia-400 shrink-0" />
           <span>
             {isEn
-              ? 'ICT Mechanics: Binary conversion (8-4-2-1), Logic Gates (AND/OR/XOR), C++ modulo (%), DNS & HTTPS Port 443.'
-              : 'Mecanici TIC integrate: Conversii binare (8-4-2-1), Porți logice (AND/OR/XOR), C++ modulo (%), DNS & Port HTTPS 443.'}
+              ? 'ICT Mechanics: Binary (8-4-2-1), Logic Gates (AND/OR/XOR), C++ modulo (%), DNS & HTTPS.'
+              : 'Mecanici TIC: Conversii binare (8-4-2-1), Porți logice (AND/OR/XOR), C++ modulo (%), DNS & HTTPS.'}
           </span>
         </div>
         <div className="flex items-center gap-2 text-amber-300 font-mono font-bold">

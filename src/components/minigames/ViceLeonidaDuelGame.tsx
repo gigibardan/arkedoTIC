@@ -277,6 +277,10 @@ export const ViceLeonidaDuelGame: React.FC<ViceLeonidaDuelGameProps> = ({
     [soundEnabled]
   );
 
+  useEffect(() => {
+    forceScrollToTop();
+  }, []);
+
   const showToast = useCallback((msg: string) => {
     setToastMsg(msg);
     setTimeout(() => {
@@ -777,11 +781,21 @@ export const ViceLeonidaDuelGame: React.FC<ViceLeonidaDuelGameProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Left: Live Highway Canvas + Boost Quiz / Sabotage Defense */}
         <div className="lg:col-span-8 relative bg-slate-950 border-2 border-fuchsia-500/40 rounded-3xl overflow-hidden shadow-2xl">
-          <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H} className="w-full aspect-[13/8] block" />
+          <canvas
+            ref={canvasRef}
+            width={CANVAS_W}
+            height={CANVAS_H}
+            onPointerDown={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const relX = e.clientX - rect.left;
+              moveLane(relX < rect.width / 2 ? -1 : 1);
+            }}
+            className="w-full aspect-[13/8] block touch-none cursor-pointer"
+          />
 
           {/* Active Gate ICT Boost Quiz Popup */}
           {activeGateQuiz && !matchResult && (
-            <div className="absolute inset-x-3 top-3 bg-slate-900/95 border-2 border-purple-400 rounded-2xl p-3.5 shadow-2xl space-y-2.5 z-20">
+            <div className="relative sm:absolute sm:inset-x-3 sm:top-3 bg-slate-900/95 border-2 border-purple-400 rounded-2xl p-3 sm:p-3.5 shadow-2xl space-y-2.5 z-20 m-2 sm:m-0">
               <div className="flex items-center justify-between text-[11px] font-mono text-purple-300 font-bold">
                 <span>⚡ LEONIDA BOOST GATE (+250 PTS +1 ATTACK)</span>
                 <button
@@ -839,7 +853,7 @@ export const ViceLeonidaDuelGame: React.FC<ViceLeonidaDuelGameProps> = ({
 
           {/* Active Incoming Sabotage: 4-Bit Firewall Lock */}
           {firewallTarget !== null && !matchResult && (
-            <div className="absolute inset-x-4 bottom-16 bg-slate-900/95 border-2 border-cyan-400 rounded-2xl p-3.5 shadow-2xl space-y-2 z-20">
+            <div className="relative sm:absolute sm:inset-x-4 sm:bottom-16 bg-slate-900/95 border-2 border-cyan-400 rounded-2xl p-3 sm:p-3.5 shadow-2xl space-y-2 z-20 m-2 sm:m-0">
               <div className="flex justify-between items-center text-xs font-mono text-cyan-300 font-bold">
                 <span>🔒 {isEn ? `UNLOCK FIREWALL: MAKE ${firewallTarget}` : `DEBLOCHEAZĂ FIREWALL: FORMEAZĂ ${firewallTarget}`}</span>
                 <span className="tabular-nums">{fwValue} / {firewallTarget}</span>
@@ -964,8 +978,8 @@ export const ViceLeonidaDuelGame: React.FC<ViceLeonidaDuelGameProps> = ({
 
       {/* Match Result Overlay Modal */}
       {matchResult && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-slate-900 border-2 border-amber-400/60 rounded-3xl p-6 text-center space-y-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-4 pb-24 sm:pb-4 overflow-y-auto">
+          <div className="max-w-md w-full bg-slate-900 border-2 border-amber-400/60 rounded-3xl p-5 sm:p-6 text-center space-y-4 shadow-2xl my-0 sm:my-auto">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-fuchsia-500 to-amber-500 mx-auto flex items-center justify-center text-white shadow-xl">
               <Trophy className="w-8 h-8" />
             </div>

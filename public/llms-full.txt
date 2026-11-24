@@ -8,11 +8,11 @@ Acest document furnizează contextul educațional, curricular, tehnic și compet
 
 - **Nume complet:** ArkyEdu – Platformă Educațională Interactivă de TIC, Programare & Robotică pentru Copii
 - **Acronim / Alias:** ARKEDO / ArkyEdu TIC
-- **URL oficial:** https://www.arkyedu.com/
+- **URL oficial:** https://www.arkyedu.com/ (RO) · https://www.arkyedu.com/en/ (EN)
 - **Ghid Educație Tehnologie Copii:** https://www.arkyedu.com/educatie-tehnologie-copii/
 - **Pagină de Comparație vs Cursuri Private:** https://www.arkyedu.com/comparatie-scoli-private/
 - **Grup țintă:** Copii și elevi de gimnaziu (clasele V, VI, VII, VIII – vârste 10–15 ani), profesori de informatică și TIC, părinți din România și diaspora.
-- **Limbi suportate:** 100% Bilingv — Română (`ro`, terminologie oficială a Ministerului Educației) și Engleză (`en`, `?lang=en`).
+- **Limbi suportate:** 100% Bilingv — Română (`ro`, pe domeniul principal `/`) și Engleză (`en`, pe ruta dedicată `/en/` și perechile `/.../en/`).
 - **Model Financiar:** 100% GRATUIT (0 Lei), non-profit, fără abonamente, fără reclame, sigur pentru minori (GDPR).
 - **Cadrul de reglementare:** Ordinul Ministrului Educației Naționale nr. 3393/28.02.2017 & OM 5420/2024 privind programele școlare pentru Informatică și TIC (manualele aprobate Art Klett 2025, Litera, EDP) și Cadrul European DigComp.
 - **Scară și Conținut Verificabil:**

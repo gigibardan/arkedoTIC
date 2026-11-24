@@ -32,6 +32,7 @@ import { sounds } from '../utils/audio';
 import { PWAInstallButton } from './pwa/PWAInstallButton';
 import { ReportIssueButton } from './ReportIssueButton';
 import { CATALOG_COUNTS } from '../data/catalogPreviews';
+import { subscribeAlternateRoutes, type AlternateRouteUrls } from '../utils/seoManager';
 
 interface HeaderProps {
   score: number;
@@ -95,7 +96,16 @@ export const Header: React.FC<HeaderProps> = ({
   const { openReportModal } = useReportIssue();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+  const [altRoutes, setAltRoutes] = useState<AlternateRouteUrls>({
+    roPath: '/',
+    enPath: '/en/',
+    hasPairedEnRoute: true,
+  });
   const resourcesDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    return subscribeAlternateRoutes(setAltRoutes);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -117,8 +127,23 @@ export const Header: React.FC<HeaderProps> = ({
     };
   }, []);
 
-  const handleLanguageChange = (newLang: 'ro' | 'en') => {
+  const handleLanguageLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, newLang: 'ro' | 'en') => {
+    // Allow Ctrl/Cmd/Shift/Middle-click to open the target language URL natively in a new tab
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+      return;
+    }
+    e.preventDefault();
     sounds.playClick();
+
+    const targetPath = newLang === 'en' ? altRoutes.enPath : altRoutes.roPath;
+    if (altRoutes.hasPairedEnRoute && currentView !== 'lesson' && typeof window !== 'undefined') {
+      try {
+        window.history.pushState({}, '', targetPath);
+        window.dispatchEvent(new Event('arky_url_change'));
+      } catch {
+        // Ignore history pushState errors
+      }
+    }
     setLang(newLang);
   };
 
@@ -796,11 +821,12 @@ export const Header: React.FC<HeaderProps> = ({
               <PWAInstallButton variant="compact" />
             </div>
 
-            {/* Language Switcher */}
+            {/* Language Switcher (Real SEO <a> links with instant SPA navigation) */}
             <div className="flex items-center bg-slate-900 p-0.5 rounded-xl border border-slate-700/80 shadow-inner shrink-0">
-              <button
-                type="button"
-                onClick={() => handleLanguageChange('ro')}
+              <a
+                href={altRoutes.roPath}
+                hrefLang="ro"
+                onClick={(e) => handleLanguageLinkClick(e, 'ro')}
                 className={`px-2 py-1 rounded-lg text-[11px] sm:text-xs font-black font-mono transition cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center touch-manipulation active:scale-95 ${
                   lang === 'ro' ? 'bg-emerald-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white'
                 }`}
@@ -808,10 +834,11 @@ export const Header: React.FC<HeaderProps> = ({
                 aria-label="Comută limba în Română"
               >
                 RO
-              </button>
-              <button
-                type="button"
-                onClick={() => handleLanguageChange('en')}
+              </a>
+              <a
+                href={altRoutes.enPath}
+                hrefLang="en"
+                onClick={(e) => handleLanguageLinkClick(e, 'en')}
                 className={`px-2 py-1 rounded-lg text-[11px] sm:text-xs font-black font-mono transition cursor-pointer min-w-[32px] min-h-[32px] flex items-center justify-center touch-manipulation active:scale-95 ${
                   lang === 'en' ? 'bg-emerald-500 text-slate-950 shadow-sm' : 'text-slate-300 hover:text-white'
                 }`}
@@ -819,7 +846,7 @@ export const Header: React.FC<HeaderProps> = ({
                 aria-label="Switch language to English"
               >
                 EN
-              </button>
+              </a>
             </div>
 
             {/* Report an Issue quick button (md+ desktop/tablet) */}
@@ -1212,21 +1239,29 @@ export const Header: React.FC<HeaderProps> = ({
 
               <div className="flex items-center gap-2 font-mono">
                 <Globe className="w-3.5 h-3.5 text-slate-400" />
-                <button
-                  type="button"
-                  onClick={() => handleLanguageChange('ro')}
+                <a
+                  href={altRoutes.roPath}
+                  hrefLang="ro"
+                  onClick={(e) => {
+                    handleLanguageLinkClick(e, 'ro');
+                    setIsMobileMenuOpen(false);
+                  }}
                   className={`font-bold transition cursor-pointer px-1 ${lang === 'ro' ? 'text-emerald-400 underline' : 'text-slate-400'}`}
                 >
                   Română
-                </button>
+                </a>
                 <span className="text-slate-600">/</span>
-                <button
-                  type="button"
-                  onClick={() => handleLanguageChange('en')}
+                <a
+                  href={altRoutes.enPath}
+                  hrefLang="en"
+                  onClick={(e) => {
+                    handleLanguageLinkClick(e, 'en');
+                    setIsMobileMenuOpen(false);
+                  }}
                   className={`font-bold transition cursor-pointer px-1 ${lang === 'en' ? 'text-emerald-400 underline' : 'text-slate-400'}`}
                 >
                   English
-                </button>
+                </a>
               </div>
             </div>
           </div>

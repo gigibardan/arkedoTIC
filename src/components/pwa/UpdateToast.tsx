@@ -16,6 +16,9 @@ export const UpdateToast: React.FC = () => {
   useEffect(() => {
     return subscribeAppUpdate((version) => {
       setPendingVersion(version);
+      if (!version) {
+        setIsUpdating(false);
+      }
     });
   }, []);
 

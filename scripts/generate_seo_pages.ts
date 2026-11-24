@@ -1760,7 +1760,6 @@ function generateTechEducationPillar() {
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
   <link rel="alternate" hreflang="ro" href="${canonicalUrl}">
-  <link rel="alternate" hreflang="en" href="https://www.arkyedu.com/?lang=en">
   <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="article">
@@ -3698,6 +3697,15 @@ function generateSitemap() {
       images: [
         { loc: 'https://www.arkyedu.com/og-cover.png', title: 'ArkyEdu — Platformă Gratuită de Educație TIC, Coding & Robotică (V–VIII)' },
         { loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida Open-World GTA 6 Sandbox 2D Educativ' }
+      ]
+    },
+    {
+      loc: 'https://www.arkyedu.com/en/',
+      priority: '0.98',
+      changefreq: 'daily',
+      images: [
+        { loc: 'https://www.arkyedu.com/og-cover.png', title: 'ArkyEdu – Free Kids ICT, Coding & Arduino Education (Ages 10–15)' },
+        { loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida Open-World GTA 6 Educational 2D Sandbox' }
       ]
     },
     { loc: 'https://www.arkyedu.com/sandbox/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Sandbox Cod Live C++17, Python 3 & HTML5' }] },

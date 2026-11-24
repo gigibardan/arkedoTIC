@@ -64,6 +64,56 @@ function upsertLink(rel: string, href: string) {
   el.setAttribute('href', href);
 }
 
+export interface AlternateRouteUrls {
+  roPath: string;
+  enPath: string;
+  hasPairedEnRoute: boolean;
+}
+
+type AlternateRouteListener = (routes: AlternateRouteUrls) => void;
+
+let currentAlternateRoutes: AlternateRouteUrls = {
+  roPath: '/',
+  enPath: '/en/',
+  hasPairedEnRoute: true,
+};
+const alternateRouteListeners = new Set<AlternateRouteListener>();
+
+export function subscribeAlternateRoutes(listener: AlternateRouteListener): () => void {
+  alternateRouteListeners.add(listener);
+  listener(currentAlternateRoutes);
+  return () => {
+    alternateRouteListeners.delete(listener);
+  };
+}
+
+function notifyAlternateRoutes(next: AlternateRouteUrls) {
+  currentAlternateRoutes = next;
+  for (const listener of alternateRouteListeners) {
+    try {
+      listener(next);
+    } catch {
+      // Ignore subscriber errors
+    }
+  }
+}
+
+function upsertHreflang(hreflang: 'ro' | 'en' | 'x-default', href: string | null) {
+  if (typeof document === 'undefined') return;
+  const existing = document.querySelector<HTMLLinkElement>(`link[rel="alternate"][hreflang="${hreflang}"]`);
+  if (!href) {
+    if (existing) existing.remove();
+    return;
+  }
+  const el = existing || document.createElement('link');
+  el.setAttribute('rel', 'alternate');
+  el.setAttribute('hreflang', hreflang);
+  el.setAttribute('href', href);
+  if (!existing) {
+    document.head.appendChild(el);
+  }
+}
+
 function upsertJsonLd(id: string, data: Record<string, unknown> | null) {
   if (typeof document === 'undefined') return;
   const existing = document.getElementById(id);
@@ -106,7 +156,11 @@ export async function updateDynamicSeo(
     ? '100% free interactive ICT, C++, Scratch, Excel & Arduino IoT learning platform for students aged 10-15, featuring 40 lessons, 30 arcade games & 21+ 1v1 duels.'
     : 'Platformă 100% gratuită de educație TIC, programare C++/Scratch, Excel și robotică Arduino pentru copii (clasele V–VIII), 30 jocuri arcade și 21+ dueluri 1v1.';
 
-  let canonicalUrl = `${BASE_URL}/`;
+  let canonicalUrl = isEn ? `${BASE_URL}/en/` : `${BASE_URL}/`;
+  let hreflangRoUrl: string | null = `${BASE_URL}/`;
+  let hreflangEnUrl: string | null = `${BASE_URL}/en/`;
+  let hreflangXDefaultUrl: string | null = `${BASE_URL}/`;
+  let hasPairedEnRoute = view === 'catalog';
   let robotsContent = 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
   let dynamicJsonLd: Record<string, unknown> | null = null;
 
@@ -114,6 +168,9 @@ export async function updateDynamicSeo(
     title = isEn ? 'School Admin Panel | ArkyEdu' : 'Administrare Școli & Clase | ArkyEdu';
     robotsContent = 'noindex, nofollow';
     canonicalUrl = `${BASE_URL}/superadmin`;
+    hreflangRoUrl = null;
+    hreflangEnUrl = null;
+    hreflangXDefaultUrl = null;
   } else if (view === 'teacher') {
     title = isEn
       ? 'Teacher Portal & Digital Gradebook | ArkyEdu ICT'
@@ -122,6 +179,9 @@ export async function updateDynamicSeo(
       ? 'Digital gradebook, curriculum sheets, automated scoring (1-10) and GDPR-compliant class management for ICT & Computer Science teachers.'
       : 'Instrument gratuit pentru profesorii de TIC: catalog digital, evaluare automată pe bareme 1–10, export condică și fișe conforme programei naționale.';
     canonicalUrl = `${BASE_URL}/profesor/`;
+    hreflangRoUrl = canonicalUrl;
+    hreflangEnUrl = null;
+    hreflangXDefaultUrl = canonicalUrl;
   } else if (view === 'arcade') {
     if (arcadeGame === 'vice_leonida') {
       title = isEn
@@ -130,7 +190,11 @@ export async function updateDynamicSeo(
       description = isEn
         ? 'Play Vice Leonida VI: Cyber Runner free in browser! Swap Lucia Caminos & Jason Duval across Vice Beach, Venetian Causeway, Port Gellhorn & Grassrivers Airboat.'
         : 'Joacă gratuit Vice Leonida VI: Cyber Runner, joc arcade inspirat din GTA 6 cu Lucia Caminos & Jason Duval, 4 sectoare din Leonida, Airboat și hack-uri binare TIC.';
-      canonicalUrl = isEn ? `${BASE_URL}/arcade/vice-leonida-gta6/en/` : `${BASE_URL}/arcade/vice-leonida-gta6/`;
+      hreflangRoUrl = `${BASE_URL}/arcade/vice-leonida-gta6/`;
+      hreflangEnUrl = `${BASE_URL}/arcade/vice-leonida-gta6/en/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+      hasPairedEnRoute = true;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@graph': [
@@ -182,6 +246,9 @@ export async function updateDynamicSeo(
         ? 'Play 30 free educational retro & open-world games: Vice Leonida Open-World (GTA 6), Cyber Runner, Cyber Pac-Man, Arkanoid, Frogger, Sokoban & PC Builder.'
         : '30 mini-jocuri arcade gratuite pentru educație digitală: Vice Leonida Open-World (GTA 6), Cyber Runner, Pac-Man, Arkanoid, Frogger, Sokoban & PC Builder.';
       canonicalUrl = `${BASE_URL}/arcade/`;
+      hreflangRoUrl = canonicalUrl;
+      hreflangEnUrl = null;
+      hreflangXDefaultUrl = canonicalUrl;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
@@ -200,7 +267,11 @@ export async function updateDynamicSeo(
       description = isEn
         ? 'Compete 1v1 in Vice Leonida Cyber-Heist Showdown! Race to 2,500 Vault Points with Lucia & Jason, hit ICT Boost Gates, and launch live cyber sabotages.'
         : 'Duel multiplayer 1v1 inspirat din GTA 6! Întrece-te până la 2.500 puncte Vault în Vice Beach cu Boost Gates TIC și sabotaje live: Drone 3★, Glitch și Firewall Lock.';
-      canonicalUrl = isEn ? `${BASE_URL}/duel/vice-leonida-1v1/en/` : `${BASE_URL}/duel/vice-leonida-1v1/`;
+      hreflangRoUrl = `${BASE_URL}/duel/vice-leonida-1v1/`;
+      hreflangEnUrl = `${BASE_URL}/duel/vice-leonida-1v1/en/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+      hasPairedEnRoute = true;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@graph': [
@@ -244,6 +315,9 @@ export async function updateDynamicSeo(
         ? 'Compete live 1v1 in Vice Leonida 1v1 (GTA 6), Cyber Battleship, File-Drop Attack Tetris, System Sabotage, C++ Code Racer, Binary Clash & Circuit Duel.'
         : 'Confruntări live 1v1 pentru elevi: Vice Leonida 1v1 (GTA 6), Cyber Battleship, File-Drop Attack, System Sabotage, C++ Code Racer, Binary Clash și Circuit Clash.';
       canonicalUrl = `${BASE_URL}/duel/`;
+      hreflangRoUrl = canonicalUrl;
+      hreflangEnUrl = null;
+      hreflangXDefaultUrl = canonicalUrl;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
@@ -262,15 +336,22 @@ export async function updateDynamicSeo(
       ? 'Interactive Smart City & IoT robotics lab: PWM smart lighting, ultrasonic barriers, MQ-2 gas alerts, and Arduino Uno sensors in your browser.'
       : 'Simulator interactiv Smart City IoT pentru gimnaziu: iluminat PWM, senzori ultrasonici HC-SR04, alarmă gaz MQ-2 și microcontroller Arduino Uno.';
     canonicalUrl = `${BASE_URL}/oras/`;
+    hreflangRoUrl = canonicalUrl;
+    hreflangEnUrl = null;
+    hreflangXDefaultUrl = canonicalUrl;
   } else if (view === 'blog') {
     const { findBlogArticleBySlug } = await import('../data/blog');
     if (requestToken !== activeSeoRequestToken) return;
     const article = findBlogArticleBySlug(blogSlug);
+    hasPairedEnRoute = true;
     if (article) {
       const content = isEn ? article.en : article.ro;
       title = content.metaTitle;
       description = content.metaDescription.slice(0, 158);
-      canonicalUrl = isEn ? `${BASE_URL}/blog/en/${article.en.slug}/` : `${BASE_URL}/blog/${article.ro.slug}/`;
+      hreflangRoUrl = `${BASE_URL}/blog/${article.ro.slug}/`;
+      hreflangEnUrl = `${BASE_URL}/blog/en/${article.en.slug}/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
     } else {
       title = isEn
         ? 'ICT, Coding & Tech Guides Blog (Grades 5–8) | ArkyEdu'
@@ -278,17 +359,24 @@ export async function updateDynamicSeo(
       description = isEn
         ? 'Practical bilingual guides for middle school students, parents, and ICT teachers: C++ troubleshooting, Excel formulas, AI study habits, and online safety.'
         : 'Articole și ghiduri practice de TIC pentru clasele V–VIII: rezolvare erori C++, formule Excel, AI & ChatGPT la școală și siguranță online pe Roblox, TikTok și Discord.';
-      canonicalUrl = isEn ? `${BASE_URL}/blog/en/` : `${BASE_URL}/blog/`;
+      hreflangRoUrl = `${BASE_URL}/blog/`;
+      hreflangEnUrl = `${BASE_URL}/blog/en/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
     }
   } else if (view === 'glossary') {
     const { findGlossaryTermBySlug } = await import('../data/glossary');
     if (requestToken !== activeSeoRequestToken) return;
     const found = findGlossaryTermBySlug(glossarySlug).term;
+    hasPairedEnRoute = true;
     if (found) {
       const c = isEn ? found.en : found.ro;
       title = isEn ? `${c.term} – Definition & Examples | ArkyEdu Glossary` : `${c.term} – Definiție, Exemplu & Teste | Glosar ArkyEdu`;
       description = c.shortAnswer.slice(0, 158);
-      canonicalUrl = isEn ? `${BASE_URL}/glosar/en/${found.en.slug}/` : `${BASE_URL}/glosar/${found.ro.slug}/`;
+      hreflangRoUrl = `${BASE_URL}/glosar/${found.ro.slug}/`;
+      hreflangEnUrl = `${BASE_URL}/glosar/en/${found.en.slug}/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
     } else {
       title = isEn
         ? 'Bilingual ICT & Computer Science Glossary (Grades 5–8) | ArkyEdu'
@@ -296,17 +384,24 @@ export async function updateDynamicSeo(
       description = isEn
         ? '44 essential middle-school CS & ICT terms explained clearly: CPU, RAM, C++ modulo %, Excel IF, Phishing 2FA, Arduino millis() & AI prompting.'
         : '44 de termeni esențiali de Informatică și TIC explicați clar pentru gimnaziu: CPU, RAM, modulo %, Excel IF, Phishing 2FA, Arduino millis() și AI.';
-      canonicalUrl = isEn ? `${BASE_URL}/glosar/en/` : `${BASE_URL}/glosar/`;
+      hreflangRoUrl = `${BASE_URL}/glosar/`;
+      hreflangEnUrl = `${BASE_URL}/glosar/en/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
     }
   } else if (view === 'fise') {
     const { findWorksheetBySlug } = await import('../data/worksheets');
     if (requestToken !== activeSeoRequestToken) return;
     const foundWs = findWorksheetBySlug(worksheetSlug).worksheet;
+    hasPairedEnRoute = true;
     if (foundWs) {
       const wLoc = isEn ? foundWs.en : foundWs.ro;
       title = wLoc.metaTitle;
       description = wLoc.metaDescription.slice(0, 158);
-      canonicalUrl = isEn ? `${BASE_URL}/fise/en/${foundWs.en.slug}/` : `${BASE_URL}/fise/${foundWs.ro.slug}/`;
+      hreflangRoUrl = `${BASE_URL}/fise/${foundWs.ro.slug}/`;
+      hreflangEnUrl = `${BASE_URL}/fise/en/${foundWs.en.slug}/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@graph': [
@@ -344,7 +439,10 @@ export async function updateDynamicSeo(
       description = isEn
         ? '16 printable A4 and interactive ICT & C++ worksheets, graded exams with 100-point rubrics, Scratch, Excel & Arduino IoT project sheets for Grades 5–8.'
         : '16 fișe de lucru și teste cu barem oficial 1–10 (100p) pentru clasele V–VIII: C++, Scratch, Excel, Word, HTML5, Securitate & Arduino Smart City. Tipărire A4 gratuită.';
-      canonicalUrl = isEn ? `${BASE_URL}/fise/en/` : `${BASE_URL}/fise/`;
+      hreflangRoUrl = `${BASE_URL}/fise/`;
+      hreflangEnUrl = `${BASE_URL}/fise/en/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
@@ -362,7 +460,11 @@ export async function updateDynamicSeo(
     description = isEn
       ? 'Step-by-step C++ RAM & array trace debugger with breakpoints, 12-problem ICT Olympiad Arena, Python 3 & HTML5 live sandbox in your browser.'
       : 'Depanator vizual C++ pas-cu-pas cu memorie RAM și vectori, Arena Olimpiada TIC cu 12 probleme pe 5 teste, plus Python 3 și HTML5 direct în browser.';
-    canonicalUrl = isEn ? `${BASE_URL}/sandbox/en/` : `${BASE_URL}/sandbox/`;
+    hreflangRoUrl = `${BASE_URL}/sandbox/`;
+    hreflangEnUrl = `${BASE_URL}/sandbox/en/`;
+    hreflangXDefaultUrl = hreflangRoUrl;
+    canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+    hasPairedEnRoute = true;
   } else if (view === 'carnet') {
     title = isEn
       ? 'My Digital Portfolio: Grades, Diplomas & Streaks | ArkyEdu'
@@ -372,6 +474,9 @@ export async function updateDynamicSeo(
       : 'Carnetul digital personal ArkyEdu cu note pe clase, diplome imprimabile, serie zilnică, insigne și recorduri Arcade.';
     robotsContent = 'noindex, nofollow';
     canonicalUrl = `${BASE_URL}/carnet`;
+    hreflangRoUrl = null;
+    hreflangEnUrl = null;
+    hreflangXDefaultUrl = null;
   } else if (view === 'evaluare') {
     title = isEn
       ? 'ICT & CS Timed Evaluation Simulator (Grades 5–8) | ArkyEdu'
@@ -380,6 +485,9 @@ export async function updateDynamicSeo(
       ? 'Generate randomized timed ICT & coding tests across Grades 5–8 with automated 1–10 grading, detailed answer explanations, and Cloud progress tracking.'
       : 'Generează teste rapide cronometrate din programa TIC și Informatică V–VIII, cu notare automată 1–10 și explicații pas cu pas.';
     canonicalUrl = `${BASE_URL}/evaluare`;
+    hreflangRoUrl = canonicalUrl;
+    hreflangEnUrl = null;
+    hreflangXDefaultUrl = canonicalUrl;
   } else if (view === 'livequiz') {
     title = isEn
       ? 'Live Classroom Quiz Arena (PIN Join) | ArkyEdu'
@@ -389,6 +497,9 @@ export async function updateDynamicSeo(
       : 'Participă în timp real la concursul Quiz Live din ora de TIC introducând codul PIN de pe tablă.';
     robotsContent = 'noindex, nofollow';
     canonicalUrl = `${BASE_URL}/quiz-live`;
+    hreflangRoUrl = null;
+    hreflangEnUrl = null;
+    hreflangXDefaultUrl = null;
   } else if (view === 'leonida') {
     const { LEONIDA_FAQS } = await import('../data/leonidaOpenWorldData');
     if (requestToken !== activeSeoRequestToken) return;
@@ -398,7 +509,11 @@ export async function updateDynamicSeo(
     description = isEn
       ? 'Play Vice Leonida Open-World 2D free in browser! Explore 6 GTA 6 State of Leonida districts with Lucia Caminos & Jason Duval, drive 5 vehicles, evade 5-star VCPD chases & crack CS quests.'
       : 'Joacă gratuit Vice Leonida Open-World 2D direct în browser! Explorează toate cele 6 regiuni din GTA 6 Leonida cu Lucia Caminos & Jason Duval, condu 5 vehicule + Airboat și sparge misiuni TIC.';
-    canonicalUrl = isEn ? `${BASE_URL}/leonida/en/` : `${BASE_URL}/leonida/`;
+    hreflangRoUrl = `${BASE_URL}/leonida/`;
+    hreflangEnUrl = `${BASE_URL}/leonida/en/`;
+    hreflangXDefaultUrl = hreflangRoUrl;
+    canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+    hasPairedEnRoute = true;
     dynamicJsonLd = {
       '@context': 'https://schema.org',
       '@graph': [
@@ -444,7 +559,11 @@ export async function updateDynamicSeo(
     description = isEn
       ? 'Explore free interactive LLM tokenizers, Softmax Temperature & hallucinations, 6 Deepfake photo/voice forensics cases & C.R.I.F. Prompt Architect.'
       : 'Simulator gratuit pentru elevi: Tokenizator LLM, Temperatură & Halucinații AI, 6 cazuri de detecție Deepfake foto/audio/știri și Prompt Architect C.R.I.F.';
-    canonicalUrl = isEn ? `${BASE_URL}/laborator-ai/en/` : `${BASE_URL}/laborator-ai/`;
+    hreflangRoUrl = `${BASE_URL}/laborator-ai/`;
+    hreflangEnUrl = `${BASE_URL}/laborator-ai/en/`;
+    hreflangXDefaultUrl = hreflangRoUrl;
+    canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+    hasPairedEnRoute = true;
     dynamicJsonLd = {
       '@context': 'https://schema.org',
       '@graph': [
@@ -480,7 +599,11 @@ export async function updateDynamicSeo(
     description = isEn
       ? 'Animate Bubble Sort, Selection Sort, Insertion Sort & Binary Search live with C++, toggle 8-bit binary/RGB LEDs, step through a Von Neumann CPU and wire logic gates.'
       : 'Animație pas-cu-pas Bubble Sort, Căutare Binară și cod C++, registru binar 8-biți / RGB, simulator CPU Von Neumann Fetch-Decode-Execute și porți logice.';
-    canonicalUrl = isEn ? `${BASE_URL}/laborator-algoritmi/en/` : `${BASE_URL}/laborator-algoritmi/`;
+    hreflangRoUrl = `${BASE_URL}/laborator-algoritmi/`;
+    hreflangEnUrl = `${BASE_URL}/laborator-algoritmi/en/`;
+    hreflangXDefaultUrl = hreflangRoUrl;
+    canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+    hasPairedEnRoute = true;
     dynamicJsonLd = {
       '@context': 'https://schema.org',
       '@graph': [
@@ -518,6 +641,9 @@ export async function updateDynamicSeo(
         : `${mod.shortTitle} – ${mod.grade} | ArkyEdu TIC`;
       description = mod.metaDescription.slice(0, 158);
       canonicalUrl = `${BASE_URL}/cursuri/${mod.id}/`;
+      hreflangRoUrl = canonicalUrl;
+      hreflangEnUrl = null;
+      hreflangXDefaultUrl = canonicalUrl;
     }
   }
 
@@ -545,10 +671,24 @@ export async function updateDynamicSeo(
   upsertMeta('property', 'og:description', description);
   upsertMeta('property', 'og:url', canonicalUrl);
   upsertMeta('property', 'og:locale', isEn ? 'en_US' : 'ro_RO');
+  upsertMeta('property', 'og:locale:alternate', isEn ? 'ro_RO' : 'en_US');
   upsertMeta('property', 'og:image', socialImage);
   upsertMeta('name', 'twitter:title', title);
   upsertMeta('name', 'twitter:description', description);
   upsertMeta('name', 'twitter:image', socialImage);
   upsertLink('canonical', canonicalUrl);
+  upsertHreflang('ro', hreflangRoUrl);
+  upsertHreflang('en', hreflangEnUrl);
+  upsertHreflang('x-default', hreflangXDefaultUrl);
   upsertJsonLd('arky-dynamic-jsonld', dynamicJsonLd);
+
+  const toPath = (fullUrl: string | null, fallback: string) => {
+    if (!fullUrl) return fallback;
+    return fullUrl.replace(BASE_URL, '') || '/';
+  };
+  notifyAlternateRoutes({
+    roPath: hasPairedEnRoute ? toPath(hreflangRoUrl, '/') : '/',
+    enPath: hasPairedEnRoute ? toPath(hreflangEnUrl, '/en/') : '/en/',
+    hasPairedEnRoute,
+  });
 }

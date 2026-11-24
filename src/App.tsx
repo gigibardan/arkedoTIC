@@ -102,7 +102,7 @@ function resolveViewFromLocation(): AppView {
   if (pathname.includes('/city') || pathname.includes('/oras') || hash.includes('city') || hash.includes('oras')) return 'city';
   if (pathname.startsWith('/blog') || hash.startsWith('#blog')) return 'blog';
   if (pathname.startsWith('/glosar') || hash.startsWith('#glosar')) return 'glossary';
-  if (pathname.startsWith('/leonida') || hash.startsWith('#leonida')) return 'leonida';
+  if (pathname.startsWith('/leonida') || hash.startsWith('#leonida') || params.get('view') === 'leonida') return 'leonida';
   if (pathname.startsWith('/laborator-ai') || hash.startsWith('#laborator-ai') || params.get('view') === 'ailab') return 'ailab';
   if (pathname.startsWith('/laborator-algoritmi') || hash.startsWith('#laborator-algoritmi') || params.get('view') === 'algolab') return 'algolab';
   if (pathname.startsWith('/fise') || hash.startsWith('#fise')) return 'fise';
@@ -236,7 +236,7 @@ function GameContent() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
-  // Browser back/forward & hash URL synchronization
+  // Browser back/forward & language-route URL synchronization
   useEffect(() => {
     const handleUrlChange = () => {
       const next = resolveViewFromLocation();
@@ -244,15 +244,18 @@ function GameContent() {
       else if (next === 'glossary') setGlossarySlug(parseGlossarySlugFromUrl());
       else if (next === 'fise') setWorksheetSlug(parseWorksheetSlugFromUrl());
       else if (next === 'sandbox') setSandboxTab(parseSandboxTabFromUrl());
-      if (next !== 'catalog' || window.location.pathname === '/') {
+      const path = window.location.pathname;
+      if (next !== 'catalog' || path === '/' || path === '/en' || path === '/en/') {
         setView(next);
       }
     };
     window.addEventListener('popstate', handleUrlChange);
     window.addEventListener('hashchange', handleUrlChange);
+    window.addEventListener('arky_url_change', handleUrlChange);
     return () => {
       window.removeEventListener('popstate', handleUrlChange);
       window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('arky_url_change', handleUrlChange);
     };
   }, []);
 
@@ -329,7 +332,7 @@ function GameContent() {
     } else if (newView === 'algolab') {
       window.history.pushState({}, '', lang === 'en' ? '/laborator-algoritmi/en/' : '/laborator-algoritmi/');
     } else if (newView === 'catalog') {
-      window.history.pushState({}, '', '/');
+      window.history.pushState({}, '', lang === 'en' ? '/en/' : '/');
       clearCompletedActiveMission();
     }
   };

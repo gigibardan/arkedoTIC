@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { sounds } from '../../utils/audio';
+import { forceScrollToTop } from '../../utils/scrollHelper';
 import {
   addByteCoins,
   getActiveStudent,
@@ -256,12 +257,21 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const minimapRef = useRef<HTMLCanvasElement | null>(null);
   const keysRef = useRef<Record<string, boolean>>({});
+  const dragStickRef = useRef<{ active: boolean; startX: number; startY: number }>({
+    active: false,
+    startX: 0,
+    startY: 0,
+  });
   const touchInputRef = useRef<{ dx: number; dy: number; accel: boolean; brake: boolean }>({
     dx: 0,
     dy: 0,
     accel: false,
     brake: false,
   });
+
+  useEffect(() => {
+    forceScrollToTop();
+  }, []);
 
   // Mutable simulation ref for smooth 60 FPS loop
   const simRef = useRef<{
@@ -408,6 +418,7 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
 
   const startNewCampaign = useCallback(() => {
     sounds.playClick();
+    forceScrollToTop();
     const s = simRef.current;
     s.px = 1680;
     s.py = 890;
@@ -1283,36 +1294,36 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
   const activeHeroObj = LEONIDA_CAST.find((c) => c.id === hero) || LEONIDA_CAST[0];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2.5 sm:space-y-4 pb-4">
       {/* Top Workspace Control Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/95 border border-slate-800 rounded-2xl px-4 py-3">
-        <div className="flex items-center gap-3 min-w-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3 bg-slate-900/95 border border-slate-800 rounded-2xl px-3 py-2 sm:px-4 sm:py-3">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             type="button"
             onClick={() => {
               sounds.playClick();
               onBack();
             }}
-            className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 min-h-[40px]"
+            className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0 min-h-[36px] sm:min-h-[40px]"
           >
             <ArrowLeft className="w-4 h-4 text-emerald-400 shrink-0" />
             <span>{isEn ? 'Back' : 'Înapoi'}</span>
           </button>
 
           <div className="min-w-0">
-            <h2 className="text-sm sm:text-base font-extrabold text-white truncate">
+            <h2 className="text-xs sm:text-base font-extrabold text-white truncate">
               {isEn ? 'Vice Leonida: Open World (GTA 6 Tech)' : 'Vice Leonida: Open World (GTA 6 Tech)'}
             </h2>
-            <p className="text-xs text-slate-400 truncate">
+            <p className="text-[11px] sm:text-xs text-slate-400 truncate">
               {studentDisplay} · {completedMissions.length}/6 {isEn ? 'Districts' : 'Regiuni'} ·{' '}
               <span className="tabular-nums font-semibold text-amber-300">
-                {isEn ? 'Best:' : 'Record:'} {bestScore.toLocaleString()} pts
+                {bestScore.toLocaleString()} pts
               </span>
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap">
           {gameState === 'PLAYING' && (
             <>
               <button
@@ -1321,11 +1332,11 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                   sounds.playClick();
                   setRadio((prev) => (prev === 'vice84' ? 'leonida_bass' : prev === 'leonida_bass' ? 'off' : 'vice84'));
                 }}
-                className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 border border-slate-700 cursor-pointer whitespace-nowrap shrink-0 min-h-[38px]"
+                className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-1.5 border border-slate-700 cursor-pointer whitespace-nowrap shrink-0 min-h-[36px]"
                 title={isEn ? 'Switch Radio (Key N)' : 'Schimbă Radio (Tasta N)'}
               >
                 <Radio className="w-3.5 h-3.5 text-fuchsia-400 shrink-0" />
-                <span>
+                <span className="hidden xs:inline">
                   {radio === 'vice84'
                     ? 'Vice 84'
                     : radio === 'leonida_bass'
@@ -1342,10 +1353,10 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                   sounds.playClick();
                   setGameState('PAUSED_MAP');
                 }}
-                className="px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-200 text-xs font-bold flex items-center gap-1.5 border border-amber-500/40 cursor-pointer whitespace-nowrap shrink-0 min-h-[38px]"
+                className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-200 text-xs font-bold flex items-center gap-1.5 border border-amber-500/40 cursor-pointer whitespace-nowrap shrink-0 min-h-[36px]"
               >
                 <MapIcon className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                <span>{isEn ? 'World Map (M)' : 'Hartă & Garaj (M)'}</span>
+                <span>{isEn ? 'Map (M)' : 'Hartă (M)'}</span>
               </button>
             </>
           )}
@@ -1357,7 +1368,7 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
               setSoundOn(next);
               sounds.setEnabled(next);
             }}
-            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer min-h-[38px] min-w-[38px] flex items-center justify-center"
+            className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
             aria-label={isEn ? 'Toggle Sound' : 'Comută Sunet'}
           >
             {soundOn ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
@@ -1369,26 +1380,26 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
       {gameState === 'TITLE_MENU' && (
         <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
-            <div className="lg:col-span-7 relative min-h-[260px] bg-slate-950">
+            <div className="lg:col-span-7 relative h-44 sm:h-64 lg:h-auto lg:min-h-[260px] bg-slate-950">
               <img
                 src={leonidaHeroImg}
                 alt={isEn ? 'Vice Leonida coastal boulevard at sunset' : 'Bulevardul Vice Leonida la apus'}
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent flex flex-col justify-end p-6">
-                <p className="text-xs font-mono text-amber-300 font-semibold">
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent flex flex-col justify-end p-4 sm:p-6">
+                <p className="text-[11px] sm:text-xs font-mono text-amber-300 font-semibold">
                   {isEn ? 'State of Leonida · 6 Regions · 5 Drivable Vehicles' : 'Statul Leonida · 6 Regiuni · 5 Vehicule Pilotabile'}
                 </p>
-                <h1 className="text-2xl sm:text-3xl font-black text-white font-heading mt-1 leading-tight">
+                <h1 className="text-xl sm:text-3xl font-black text-white font-heading mt-1 leading-tight">
                   {isEn ? 'Vice Leonida: Open-World Story Sandbox' : 'Vice Leonida: Open-World & Misiuni TIC'}
                 </h1>
               </div>
             </div>
 
-            <div className="lg:col-span-5 p-6 flex flex-col justify-between gap-5 bg-slate-900">
-              <div className="space-y-4">
-                <p className="text-sm text-slate-300 leading-relaxed">
+            <div className="lg:col-span-5 p-4 sm:p-6 flex flex-col justify-between gap-4 sm:gap-5 bg-slate-900">
+              <div className="space-y-3 sm:space-y-4">
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                   {isEn
                     ? 'Roam freely across Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, and Ambrosia. Hop into supercars or the swamp Hydro-Airboat, evade 1★–5★ patrols, and solve real Binary, C++, Excel, and Arduino missions.'
                     : 'Explorează liber Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga și Ambrosia. Urcă în mașini sau în Hydro-Airboat pe apă, scapă de urmăririle 1★–5★ și rezolvă misiuni de Binar, C++, Excel și Arduino.'}
@@ -1411,7 +1422,7 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                             sounds.playClick();
                             setHero(hId);
                           }}
-                          className={`p-3 rounded-xl border text-left transition-colors cursor-pointer ${
+                          className={`p-2.5 sm:p-3 rounded-xl border text-left transition-colors cursor-pointer ${
                             active
                               ? 'bg-emerald-500/15 border-emerald-400 text-white'
                               : 'bg-slate-950/70 border-slate-800 text-slate-300 hover:border-slate-700'
@@ -1428,7 +1439,7 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                 </div>
 
                 {/* Concise Key Controls */}
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 space-y-1.5">
+                <div className="hidden sm:block p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-300 space-y-1.5">
                   <div className="font-bold text-white">{isEn ? 'Controls:' : 'Controale esențiale:'}</div>
                   <div>• <strong>WASD / {isEn ? 'Arrows' : 'Săgeți'}</strong> — {isEn ? 'Walk or Drive' : 'Mers pe jos sau Condus'}</div>
                   <div>• <strong>E / F</strong> — {isEn ? 'Enter/Exit Vehicle or Start Mission' : 'Intră/Ieși din Vehicul sau Pornește Misiune'}</div>
@@ -1451,26 +1462,26 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
 
       {/* ACTIVE PLAYING CANVAS & HUD */}
       {gameState !== 'TITLE_MENU' && gameState !== 'SUMMARY' && (
-        <div className="bg-slate-950 border border-slate-800 rounded-2xl p-3 sm:p-4 space-y-3 shadow-2xl">
+        <div className="bg-slate-950 border border-slate-800 rounded-2xl p-2 sm:p-4 space-y-2 sm:space-y-3 shadow-2xl">
           {/* Classic Clean GTA Top Telemetry Strip */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 tabular-nums">
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2.5">
-              <User className="w-4 h-4 text-rose-400 shrink-0" />
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-1.5 sm:gap-2.5 tabular-nums">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2">
+              <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-400 shrink-0" />
               <div className="min-w-0">
-                <div className="text-[11px] text-slate-400 truncate">{activeHeroObj.name}</div>
-                <div className="text-xs font-bold text-white truncate">
+                <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">{activeHeroObj.name}</div>
+                <div className="text-[11px] sm:text-xs font-bold text-white truncate">
                   HP {hud.hp}% · ARM {hud.armor}%
                 </div>
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2.5">
-              <Navigation className="w-4 h-4 text-cyan-400 shrink-0" />
+            <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2">
+              <Navigation className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 shrink-0" />
               <div className="min-w-0">
-                <div className="text-[11px] text-slate-400 truncate">
+                <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">
                   {isEn ? activeDistrictObj.nameEn : activeDistrictObj.nameRo}
                 </div>
-                <div className="text-xs font-bold text-cyan-300 truncate">
+                <div className="text-[11px] sm:text-xs font-bold text-cyan-300 truncate">
                   {hud.inVehicleNameEn
                     ? `${isEn ? hud.inVehicleNameEn : hud.inVehicleNameRo} · ${hud.speedKmh} km/h`
                     : isEn
@@ -1480,30 +1491,30 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2.5">
-              <Star className="w-4 h-4 text-amber-400 shrink-0" />
+            <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2">
+              <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 shrink-0" />
               <div className="min-w-0">
-                <div className="text-[11px] text-slate-400">{isEn ? 'Wanted Heat' : 'Nivel Urmărire'}</div>
-                <div className="text-xs font-black tracking-widest text-amber-300">
+                <div className="text-[10px] sm:text-[11px] text-slate-400">{isEn ? 'Wanted' : 'Urmărire'}</div>
+                <div className="text-[11px] sm:text-xs font-black tracking-widest text-amber-300">
                   {'★'.repeat(hud.wanted) + '☆'.repeat(5 - hud.wanted)}
                 </div>
               </div>
             </div>
 
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2.5">
-              <Trophy className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="p-2 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-2">
+              <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
               <div className="min-w-0">
-                <div className="text-[11px] text-slate-400">{isEn ? 'Heist Cash & Score' : 'Cash & Scor'}</div>
-                <div className="text-xs font-black text-emerald-300">
-                  ${hud.cash.toLocaleString()} · {hud.score.toLocaleString()} pts
+                <div className="text-[10px] sm:text-[11px] text-slate-400">{isEn ? 'Cash & Score' : 'Cash & Scor'}</div>
+                <div className="text-[11px] sm:text-xs font-black text-emerald-300 truncate">
+                  ${hud.cash.toLocaleString()} · {hud.score.toLocaleString()}
                 </div>
               </div>
             </div>
 
-            <div className="col-span-2 md:col-span-1 p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between gap-2">
+            <div className="col-span-2 md:col-span-1 p-1.5 sm:p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between gap-2">
               <div className="min-w-0">
-                <div className="text-[11px] text-slate-400">Shards / Missions</div>
-                <div className="text-xs font-bold text-white">
+                <div className="text-[10px] sm:text-[11px] text-slate-400">Shards / Missions</div>
+                <div className="text-[11px] sm:text-xs font-bold text-white">
                   {hud.shardsCollected}/10 · {completedMissions.length}/6
                 </div>
               </div>
@@ -1524,11 +1535,43 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
               ref={canvasRef}
               width={960}
               height={540}
-              className="w-full h-auto block max-h-[560px] object-contain mx-auto"
+              onPointerDown={(e) => {
+                e.currentTarget.setPointerCapture(e.pointerId);
+                dragStickRef.current = { active: true, startX: e.clientX, startY: e.clientY };
+                touchInputRef.current.dx = 0;
+                touchInputRef.current.dy = 0;
+              }}
+              onPointerMove={(e) => {
+                if (!dragStickRef.current.active) return;
+                const rawDx = e.clientX - dragStickRef.current.startX;
+                const rawDy = e.clientY - dragStickRef.current.startY;
+                touchInputRef.current.dx = Math.max(-1, Math.min(1, rawDx / 32));
+                touchInputRef.current.dy = Math.max(-1, Math.min(1, rawDy / 32));
+                touchInputRef.current.accel = rawDy < -12;
+                touchInputRef.current.brake = rawDy > 14;
+              }}
+              onPointerUp={(e) => {
+                if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+                  e.currentTarget.releasePointerCapture(e.pointerId);
+                }
+                dragStickRef.current.active = false;
+                touchInputRef.current.dx = 0;
+                touchInputRef.current.dy = 0;
+                touchInputRef.current.accel = false;
+                touchInputRef.current.brake = false;
+              }}
+              onPointerCancel={() => {
+                dragStickRef.current.active = false;
+                touchInputRef.current.dx = 0;
+                touchInputRef.current.dy = 0;
+                touchInputRef.current.accel = false;
+                touchInputRef.current.brake = false;
+              }}
+              className="w-full h-auto block max-h-[560px] object-contain mx-auto touch-none cursor-crosshair"
             />
 
             {/* Bottom-Left GPS Radar Minimap */}
-            <div className="hidden sm:block absolute bottom-3 left-3 p-1.5 rounded-xl bg-slate-950/90 border border-slate-700 shadow-xl">
+            <div className="hidden sm:block absolute bottom-3 left-3 p-1.5 rounded-xl bg-slate-950/90 border border-slate-700 shadow-xl pointer-events-none">
               <canvas ref={minimapRef} width={160} height={110} className="rounded-lg block" />
               <div className="text-[10px] font-mono text-slate-300 mt-1 flex items-center justify-between">
                 <span>GPS RADAR</span>
@@ -1538,7 +1581,7 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
 
             {/* Bottom-Center Contextual Prompt Banner */}
             {(hud.nearMissionId || hud.nearVehicleNameEn || hud.nearSafehouse || statusBanner) && (
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-slate-950/92 border border-slate-700 rounded-xl px-4 py-2 text-xs text-white font-semibold flex items-center gap-3 shadow-xl max-w-[92%]">
+              <div className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 bg-slate-950/92 border border-slate-700 rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 text-[11px] sm:text-xs text-white font-semibold flex items-center gap-2 sm:gap-3 shadow-xl max-w-[94%]">
                 {hud.nearMissionId ? (
                   <button
                     type="button"
@@ -1567,23 +1610,100 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
             )}
           </div>
 
-          {/* Action Toolbar + Touch Controls */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5">
-            <div className="flex flex-wrap items-center gap-2">
+          {/* Mobile/Tablet Touch Pad placed immediately below canvas for ergonomic thumb reach */}
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 lg:hidden w-full sm:w-auto justify-center sm:justify-start bg-slate-900/90 border border-slate-800 rounded-xl p-1.5">
+              <button
+                type="button"
+                onPointerDown={(e) => {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  touchInputRef.current.dx = -1;
+                }}
+                onPointerUp={(e) => {
+                  if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                  touchInputRef.current.dx = 0;
+                }}
+                onPointerCancel={() => (touchInputRef.current.dx = 0)}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 active:bg-cyan-600 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[46px]"
+                aria-label={isEn ? 'Steer left' : 'Viraj stânga'}
+              >
+                ◀
+              </button>
+              <button
+                type="button"
+                onPointerDown={(e) => {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  touchInputRef.current.accel = true;
+                  touchInputRef.current.dy = -1;
+                }}
+                onPointerUp={(e) => {
+                  if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                  touchInputRef.current.accel = false;
+                  touchInputRef.current.dy = 0;
+                }}
+                onPointerCancel={() => {
+                  touchInputRef.current.accel = false;
+                  touchInputRef.current.dy = 0;
+                }}
+                className="flex-1 sm:flex-initial px-4 py-2 rounded-xl bg-emerald-600 active:bg-emerald-500 text-white text-xs font-black select-none touch-none min-h-[44px]"
+              >
+                {isEn ? 'Up / Gas ▲' : 'Sus / Gaz ▲'}
+              </button>
+              <button
+                type="button"
+                onPointerDown={(e) => {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  touchInputRef.current.brake = true;
+                  touchInputRef.current.dy = 1;
+                }}
+                onPointerUp={(e) => {
+                  if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                  touchInputRef.current.brake = false;
+                  touchInputRef.current.dy = 0;
+                }}
+                onPointerCancel={() => {
+                  touchInputRef.current.brake = false;
+                  touchInputRef.current.dy = 0;
+                }}
+                className="px-3.5 py-2 rounded-xl bg-rose-700 active:bg-rose-600 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[46px]"
+                aria-label={isEn ? 'Brake / Down' : 'Jos / Frână'}
+              >
+                ▼
+              </button>
+              <button
+                type="button"
+                onPointerDown={(e) => {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                  touchInputRef.current.dx = 1;
+                }}
+                onPointerUp={(e) => {
+                  if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                  touchInputRef.current.dx = 0;
+                }}
+                onPointerCancel={() => (touchInputRef.current.dx = 0)}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 active:bg-cyan-600 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[46px]"
+                aria-label={isEn ? 'Steer right' : 'Viraj dreapta'}
+              >
+                ▶
+              </button>
+            </div>
+
+            {/* Action Toolbar */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <button
                 type="button"
                 onClick={handleToggleEnterExit}
-                className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-white flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                className="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-white flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Car className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                 <span>
                   {hud.inVehicleNameEn
                     ? isEn
                       ? 'Exit Vehicle (E)'
-                      : 'Ieși din Vehicul (E)'
+                      : 'Ieși (E)'
                     : isEn
                     ? 'Enter Vehicle (E)'
-                    : 'Urcă în Vehicul (E)'}
+                    : 'Urcă (E)'}
                 </span>
               </button>
 
@@ -1593,67 +1713,20 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
                   sounds.playClick();
                   setHero((p) => (p === 'lucia' ? 'jason' : 'lucia'));
                 }}
-                className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-white flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                className="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-white flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Shield className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-                <span>{isEn ? `Swap Hero (Q): ${activeHeroObj.name.split(' ')[0]}` : `Schimbă (Q): ${activeHeroObj.name.split(' ')[0]}`}</span>
+                <span>{isEn ? `Hero: ${activeHeroObj.name.split(' ')[0]}` : `${activeHeroObj.name.split(' ')[0]} [Q]`}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleTriggerEmp}
                 disabled={hud.empCooldown > 0}
-                className="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 border border-slate-700 text-xs font-bold text-cyan-300 flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                className="px-2.5 sm:px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 border border-slate-700 text-xs font-bold text-cyan-300 flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               >
                 <Zap className="w-3.5 h-3.5 shrink-0" />
-                <span>{hud.empCooldown > 0 ? `EMP (${hud.empCooldown}s)` : 'EMP Shockwave (C)'}</span>
-              </button>
-            </div>
-
-            {/* Mobile/Tablet Touch Pad */}
-            <div className="flex items-center gap-1.5 lg:hidden">
-              <button
-                type="button"
-                onPointerDown={() => (touchInputRef.current.dx = -1)}
-                onPointerUp={() => (touchInputRef.current.dx = 0)}
-                onPointerCancel={() => (touchInputRef.current.dx = 0)}
-                onPointerLeave={() => (touchInputRef.current.dx = 0)}
-                className="px-3 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[44px]"
-                aria-label={isEn ? 'Steer left' : 'Viraj stânga'}
-              >
-                ◀
-              </button>
-              <button
-                type="button"
-                onPointerDown={() => (touchInputRef.current.accel = true)}
-                onPointerUp={() => (touchInputRef.current.accel = false)}
-                onPointerCancel={() => (touchInputRef.current.accel = false)}
-                onPointerLeave={() => (touchInputRef.current.accel = false)}
-                className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold select-none touch-none min-h-[44px]"
-              >
-                {isEn ? 'Gas ▲' : 'Gaz ▲'}
-              </button>
-              <button
-                type="button"
-                onPointerDown={() => (touchInputRef.current.brake = true)}
-                onPointerUp={() => (touchInputRef.current.brake = false)}
-                onPointerCancel={() => (touchInputRef.current.brake = false)}
-                onPointerLeave={() => (touchInputRef.current.brake = false)}
-                className="px-3 py-2 rounded-xl bg-rose-700 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[44px]"
-                aria-label={isEn ? 'Brake / Reverse' : 'Frână / Marșarier'}
-              >
-                ▼
-              </button>
-              <button
-                type="button"
-                onPointerDown={() => (touchInputRef.current.dx = 1)}
-                onPointerUp={() => (touchInputRef.current.dx = 0)}
-                onPointerCancel={() => (touchInputRef.current.dx = 0)}
-                onPointerLeave={() => (touchInputRef.current.dx = 0)}
-                className="px-3 py-2 rounded-xl bg-slate-800 text-white text-xs font-bold select-none touch-none min-h-[44px] min-w-[44px]"
-                aria-label={isEn ? 'Steer right' : 'Viraj dreapta'}
-              >
-                ▶
+                <span>{hud.empCooldown > 0 ? `EMP (${hud.empCooldown}s)` : 'EMP (C)'}</span>
               </button>
             </div>
 
@@ -1673,8 +1746,8 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
 
       {/* PAUSED WORLD MAP & GARAGE SPAWNER MODAL */}
       {gameState === 'PAUSED_MAP' && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="max-w-5xl w-full bg-slate-900 border border-slate-700 rounded-2xl p-5 sm:p-6 space-y-5 shadow-2xl my-auto">
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-4 pb-24 sm:pb-4 overflow-y-auto">
+          <div className="max-w-5xl w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 sm:p-6 space-y-5 shadow-2xl my-0 sm:my-auto">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
                 <h3 className="text-lg font-black text-white">
@@ -1817,8 +1890,8 @@ export const ViceLeonidaOpenWorld: React.FC<ViceLeonidaOpenWorldProps> = ({
 
       {/* INTERACTIVE MISSION / CONTRACT CHALLENGE TERMINAL */}
       {gameState === 'CHALLENGE' && (activeChallenge || activeContractIdx !== null) && (
-        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="max-w-2xl w-full bg-slate-900 border border-slate-700 rounded-2xl p-6 space-y-5 shadow-2xl my-auto">
+        <div className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-start sm:items-center justify-center p-3 sm:p-4 pb-24 sm:pb-4 overflow-y-auto">
+          <div className="max-w-2xl w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-2xl my-0 sm:my-auto">
             {activeChallenge ? (
               <>
                 <div className="flex items-start justify-between gap-3 border-b border-slate-800 pb-3">

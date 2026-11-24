@@ -4,7 +4,8 @@
 
 Platforma oferă educație tehnologică de performanță **100% GRATUIT (0 Lei)**, fără abonamente, fără taxe și fără reclame, ca alternativă superioară pentru părinți, elevi și profesori față de școlile private de programare pentru copii (Logiscool, MindHub, Academia Micilor Developeri etc.) care percep 4.000 – 6.000 lei pe an școlar.
 
-- Website oficial: https://www.arkyedu.com/
+- Website oficial (Română): https://www.arkyedu.com/
+- Official Website (English): https://www.arkyedu.com/en/
 - Sandbox Cod Live, Debugger C++ Trace & Arena Olimpiadă (12 probleme): https://www.arkyedu.com/sandbox/
 - Fișe de Lucru, Teste cu Barem 1–10 & OJI (Tipărire A4, RO/EN): https://www.arkyedu.com/fise/
 - Index LLM Fișe, Teste & Bareme (Markdown): https://www.arkyedu.com/fise-llm.txt
@@ -20,7 +21,7 @@ Platforma oferă educație tehnologică de performanță **100% GRATUIT (0 Lei)*
 - Documentație tehnică exhaustivă LLM: https://www.arkyedu.com/llms-full.txt
 - Index RAG Blog & Ghiduri (24 Articole RO/EN): https://www.arkyedu.com/blog-llm.txt
 - Contact didactic & suport: contact@arkyedu.com
-- Limbi suportate: Română (principală, terminologie curriculară oficială) & Engleză (`?lang=en`, comutabilă instantaneu)
+- Limbi suportate: Română (`https://www.arkyedu.com/`) & Engleză (`https://www.arkyedu.com/en/`, rute dedicate cu `hreflang`)
 
 ---
 
