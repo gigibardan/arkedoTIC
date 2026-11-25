@@ -1412,171 +1412,383 @@ ${commonStyles}
   console.log('Comparison Landing Page generated.');
 }
 
-// 4. GENERATE ARCADE, DUEL, PROFESOR, ORAS HUBS (WITH RICH CARDS & SCHEMA.ORG)
+// 4. GENERATE ARCADE, DUEL, PROFESOR, ORAS HUBS (BILINGUAL RO & EN WITH RICH CARDS & SCHEMA.ORG)
 function generateFeatureHubs() {
-  const hubs = [
+  interface HubCard {
+    icon: string;
+    title: string;
+    desc: string;
+    href?: string;
+  }
+  interface HubLocaleContent {
+    title: string;
+    meta: string;
+    keywords: string;
+    h1: string;
+    appLink: string;
+    sectionTitle: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    ctaLaunchTop: string;
+    faqHeading: string;
+    blogSectionTitle: string;
+    blogAllLabel: string;
+    blogReadMore: string;
+    cardCtaDefault: string;
+    cardCtaHref: string;
+    cards: HubCard[];
+    faqs: { q: string; a: string }[];
+  }
+  interface BilingualHubConfig {
+    dir: 'arcade' | 'duel' | 'profesor' | 'oras';
+    ro: HubLocaleContent;
+    en: HubLocaleContent;
+  }
+
+  const hubs: BilingualHubConfig[] = [
     {
       dir: 'arcade',
-      title: 'Arcade TIC: 30 Jocuri Retro & GTA 6 Open-World | ArkyEdu',
-      meta: 'Colecție completă de 30 mini-jocuri arcade și open-world gratuite pentru educație TIC și coding copii: Vice Leonida Open-World Story (GTA 6), Cyber Runner, Cyber Pac-Man, Cyber Arkanoid, Frogger, Sokoban, Circuit Master 80s & PC Builder.',
-      keywords: 'jocuri arcade tic, vice leonida gta 6 joc, gta 6 open world browser educativ, jocuri educative programare copii, cyber pacman tic, cyber arkanoid firewall, cyber frogger retea, cyber sokoban servere, circuit master 80s, redstone logic simulator, pc builder simulator',
-      h1: 'Arcade Didactic TIC: 30 de Jocuri Retro &amp; Vice Leonida Open-World (GTA 6)',
-      appLink: 'https://www.arkyedu.com/#arcade',
-      sectionTitle: 'Catalog Complet: Cele 30 de Mini-Jocuri Educative Arcade',
-      cards: [
-        { icon: '🗺️', title: 'Vice Leonida: Open-World Story (GTA 6 Sandbox 2D)', desc: 'Explorează liber toate cele 6 regiuni din Statul Leonida (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) cu Lucia & Jason, 5 vehicule + Hydro-Airboat, poliție VCPD 1★–5★ și misiuni TIC!', href: 'https://www.arkyedu.com/leonida/' },
-        { icon: '🌴', title: 'Vice Leonida VI: Cyber Runner (GTA 6 Tech)', desc: 'Traversează 4 sectoare din Statul Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat) cu Lucia Caminos & Jason Duval, Nitro, EMP și hack-uri binare pe 4 biți.', href: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/' },
-        { icon: '🟡', title: 'Cyber Pac-Man: Labirintul Biților', desc: 'Colectează pachete de date pe placa de bază și activează scutul antivirus răspunzând fulger la întrebări TIC.' },
-        { icon: '🧱', title: 'Cyber Arkanoid: Firewall Breaker', desc: 'Distrugere blocuri criptate cu lasere, capsule multi-ball și fizică 60 FPS pentru consolidarea logicii.' },
-        { icon: '🐸', title: 'Cyber Frogger: Traversarea Rețelei', desc: 'Navighează pachetele IP prin benzi de trafic LAN/WAN și canale de fibră optică fără coliziuni malware.' },
-        { icon: '🤖', title: 'Cyber Sokoban: Inginerul de Servere', desc: 'Puzzle algoritmic de optimizare și împingere servere/baterii pe rack-uri în Data Center.' },
-        { icon: '☄️', title: 'Cyber Asteroids: Reactorul Vectorial', desc: 'Pilotaj vectorial cu inerție și distrugere de meteoriți binari și viruși în spațiul cibernetic.' },
-        { icon: '🚀', title: 'Cyber Invaders: Galaxia Codului', desc: 'Shooter arcade retro împotriva valurilor de bug-uri de compilare și amenințări de rețea.' },
-        { icon: '⚡', title: 'Circuit Master 80s (Arduino & Smart City)', desc: 'Cablare breadboard, Legea lui Ohm (V=I·R), multitasking millis() și grila Smart City IoT.' },
-        { icon: '⛏️', title: 'Redstone Logic Lab & Voxel Architect', desc: 'Porți logice AND, OR, NOT, XOR și construcție 3D creativă în stil Minecraft pentru gimnaziu.' },
-        { icon: '🔧', title: 'PC Builder, File-Drop & Virus Sweeper', desc: 'Asamblare PC pas cu pas (CPU, RAM, GPU, SSD), sortare extensii tip Tetris și detecție malware.' },
-        { icon: '⌨️', title: 'Tastare Rapidă (WPM), Mouse Pro & Binary', desc: 'Antrenament tastare oarbă QWERTY cu diacritice românești, dexteritate periferice și conversii binare.' }
-      ],
-      faqs: [
-        { q: 'Sunt cele 30 de jocuri arcade aliniate la materia școlară de TIC?', a: 'Da! Fiecare joc arcade consolidează noțiuni exacte din programa claselor V–VIII: biți și conversii binare pe 4/8 biți (inclusiv în Vice Leonida Open-World & Cyber Runner), extensii de fișiere, porți logice, componente PC, securitate cibernetică, sintaxă C++ și robotică Arduino.' },
-        { q: 'Se pot juca gratuit pe telefon, tabletă sau calculator școlar?', a: 'Da, toate cele 30 de jocuri rulează direct în browser (desktop & touch mobil) fără instalare și fără reclame, fiind bilingve (Română și Engleză).' }
-      ]
+      ro: {
+        title: 'Arcade TIC: 30 Jocuri Retro & GTA 6 Open-World | ArkyEdu',
+        meta: 'Colecție completă de 30 mini-jocuri arcade și open-world gratuite pentru educație TIC și coding copii: Vice Leonida Open-World Story (GTA 6), Cyber Runner, Cyber Pac-Man, Cyber Arkanoid, Frogger, Sokoban, Circuit Master 80s & PC Builder.',
+        keywords: 'jocuri arcade tic, vice leonida gta 6 joc, gta 6 open world browser educativ, jocuri educative programare copii, cyber pacman tic, cyber arkanoid firewall, cyber frogger retea, cyber sokoban servere, circuit master 80s, redstone logic simulator, pc builder simulator',
+        h1: 'Arcade Didactic TIC: 30 de Jocuri Retro &amp; Vice Leonida Open-World (GTA 6)',
+        appLink: 'https://www.arkyedu.com/#arcade',
+        sectionTitle: 'Catalog Complet: Cele 30 de Mini-Jocuri Educative Arcade',
+        ctaPrimary: '🚀 Deschide Simulatorul Live',
+        ctaSecondary: '⚖️ Vezi Comparația cu Cursurile Private',
+        ctaLaunchTop: '🎮 Lansează ARCADE',
+        faqHeading: '❓ Întrebări Frecvente',
+        blogSectionTitle: '📚 Ghiduri Practice din Blog Conectate cu ARCADE',
+        blogAllLabel: `Toate cele ${BLOG_ARTICLES.length} ghiduri →`,
+        blogReadMore: 'Citește ghidul complet →',
+        cardCtaDefault: 'Lansează în Aplicație →',
+        cardCtaHref: 'Detalii &amp; Lansează Jocul →',
+        cards: [
+          { icon: '🗺️', title: 'Vice Leonida: Open-World Story (GTA 6 Sandbox 2D)', desc: 'Explorează liber toate cele 6 regiuni din Statul Leonida (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) cu Lucia & Jason, 5 vehicule + Hydro-Airboat, poliție VCPD 1★–5★ și misiuni TIC!', href: 'https://www.arkyedu.com/leonida/' },
+          { icon: '🌴', title: 'Vice Leonida VI: Cyber Runner (GTA 6 Tech)', desc: 'Traversează 4 sectoare din Statul Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat) cu Lucia Caminos & Jason Duval, Nitro, EMP și hack-uri binare pe 4 biți.', href: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/' },
+          { icon: '🟡', title: 'Cyber Pac-Man: Labirintul Biților', desc: 'Colectează pachete de date pe placa de bază și activează scutul antivirus răspunzând fulger la întrebări TIC.' },
+          { icon: '🧱', title: 'Cyber Arkanoid: Firewall Breaker', desc: 'Distrugere blocuri criptate cu lasere, capsule multi-ball și fizică 60 FPS pentru consolidarea logicii.' },
+          { icon: '🐸', title: 'Cyber Frogger: Traversarea Rețelei', desc: 'Navighează pachetele IP prin benzi de trafic LAN/WAN și canale de fibră optică fără coliziuni malware.' },
+          { icon: '🤖', title: 'Cyber Sokoban: Inginerul de Servere', desc: 'Puzzle algoritmic de optimizare și împingere servere/baterii pe rack-uri în Data Center.' },
+          { icon: '☄️', title: 'Cyber Asteroids: Reactorul Vectorial', desc: 'Pilotaj vectorial cu inerție și distrugere de meteoriți binari și viruși în spațiul cibernetic.' },
+          { icon: '🚀', title: 'Cyber Invaders: Galaxia Codului', desc: 'Shooter arcade retro împotriva valurilor de bug-uri de compilare și amenințări de rețea.' },
+          { icon: '⚡', title: 'Circuit Master 80s (Arduino & Smart City)', desc: 'Cablare breadboard, Legea lui Ohm (V=I·R), multitasking millis() și grila Smart City IoT.' },
+          { icon: '⛏️', title: 'Redstone Logic Lab & Voxel Architect', desc: 'Porți logice AND, OR, NOT, XOR și construcție 3D creativă în stil Minecraft pentru gimnaziu.' },
+          { icon: '🔧', title: 'PC Builder, File-Drop & Virus Sweeper', desc: 'Asamblare PC pas cu pas (CPU, RAM, GPU, SSD), sortare extensii tip Tetris și detecție malware.' },
+          { icon: '⌨️', title: 'Tastare Rapidă (WPM), Mouse Pro & Binary', desc: 'Antrenament tastare oarbă QWERTY cu diacritice românești, dexteritate periferice și conversii binare.' }
+        ],
+        faqs: [
+          { q: 'Sunt cele 30 de jocuri arcade aliniate la materia școlară de TIC?', a: 'Da! Fiecare joc arcade consolidează noțiuni exacte din programa claselor V–VIII: biți și conversii binare pe 4/8 biți (inclusiv în Vice Leonida Open-World & Cyber Runner), extensii de fișiere, porți logice, componente PC, securitate cibernetică, sintaxă C++ și robotică Arduino.' },
+          { q: 'Se pot juca gratuit pe telefon, tabletă sau calculator școlar?', a: 'Da, toate cele 30 de jocuri rulează direct în browser (desktop & touch mobil) fără instalare și fără reclame, fiind bilingve (Română și Engleză).' }
+        ]
+      },
+      en: {
+        title: 'ICT Educational Arcade: 30 Retro Coding & GTA 6 Open-World Games | ArkyEdu',
+        meta: 'Play 30 free educational retro & open-world coding games in your browser: Vice Leonida Open-World Story (GTA 6 Tech), Cyber Runner, Cyber Pac-Man, Cyber Arkanoid, Frogger, Sokoban, Circuit Master 80s & PC Builder.',
+        keywords: 'kids coding arcade games free, educational retro browser games, vice leonida gta 6 educational game, cyber pacman coding game, binary logic gates game kids, circuit master arduino game, pc builder simulator kids, ArkyEdu arcade',
+        h1: 'Educational ICT Arcade: 30 Retro Games &amp; Vice Leonida Open-World (GTA 6)',
+        appLink: 'https://www.arkyedu.com/en/#arcade',
+        sectionTitle: 'Full Catalog: 30 Interactive Coding &amp; Tech Arcade Games',
+        ctaPrimary: '🚀 Launch Live Arcade Lab',
+        ctaSecondary: '📖 Open Live Code Sandbox',
+        ctaLaunchTop: '🎮 Launch ARCADE',
+        faqHeading: '❓ Frequently Asked Questions',
+        blogSectionTitle: '📚 Study Guides Connected to ARCADE',
+        blogAllLabel: `All ${BLOG_ARTICLES.length} English guides →`,
+        blogReadMore: 'Read complete guide →',
+        cardCtaDefault: 'Play in Web App →',
+        cardCtaHref: 'Details &amp; Launch Game →',
+        cards: [
+          { icon: '🗺️', title: 'Vice Leonida: Open-World Story (GTA 6 2D Sandbox)', desc: 'Roam all 6 regions of the State of Leonida (Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) with Lucia & Jason, 5 vehicles + Hydro-Airboat, VCPD 1★–5★ chases & ICT missions!', href: 'https://www.arkyedu.com/leonida/en/' },
+          { icon: '🌴', title: 'Vice Leonida VI: Cyber Runner (GTA 6 Tech)', desc: 'Dash across 4 Leonida sectors (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat) with Lucia Caminos & Jason Duval, Nitro, EMP bursts and 4-bit binary hacks.', href: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/' },
+          { icon: '🟡', title: 'Cyber Pac-Man: Maze of Bits', desc: 'Collect data packets on the motherboard and activate your antivirus shield by answering quick-fire ICT & coding prompts.' },
+          { icon: '🧱', title: 'Cyber Arkanoid: Firewall Breaker', desc: 'Smash encrypted firewall bricks with laser paddles, multi-ball capsules and 60 FPS arcade physics.' },
+          { icon: '🐸', title: 'Cyber Frogger: Network Crossing', desc: 'Guide IP packets safely across busy LAN/WAN traffic lanes and fiber-optic streams while dodging malware.' },
+          { icon: '🤖', title: 'Cyber Sokoban: Data Center Engineer', desc: 'Algorithmic path-planning puzzles pushing server racks and backup batteries onto power pads.' },
+          { icon: '☄️', title: 'Cyber Asteroids: Vector Reactor', desc: 'Inertial vector flight blasting binary meteors and corrupted packets across cyberspace.' },
+          { icon: '🚀', title: 'Cyber Invaders: Code Galaxy', desc: 'Classic retro space shooter defending your system against waves of compiler bugs and network threats.' },
+          { icon: '⚡', title: 'Circuit Master 80s (Arduino & Smart City)', desc: 'Interactive breadboard wiring, Ohm’s Law (V=I·R), non-blocking millis() loops, and Smart City IoT grids.' },
+          { icon: '⛏️', title: 'Redstone Logic Lab & Voxel Architect', desc: 'Master AND, OR, NOT, XOR logic gates and 3D creative voxel engineering tailored for grades 5–8.' },
+          { icon: '🔧', title: 'PC Builder, File-Drop & Virus Sweeper', desc: 'Assemble a full PC (CPU, RAM, GPU, SSD), sort file extensions Tetris-style, and sweep malware.' },
+          { icon: '⌨️', title: 'Speed Typing (WPM), Mouse Pro & Binary', desc: 'Touch-typing drills, pointer precision challenges, and rapid 4-bit / 8-bit binary conversions.' }
+        ],
+        faqs: [
+          { q: 'Are all 30 arcade games aligned with middle school Computer Science & ICT?', a: 'Yes! Every game reinforces core topics for ages 10–15: 4-bit & 8-bit binary math (including inside Vice Leonida Open-World & Cyber Runner), file extensions, Boolean logic gates, PC hardware, cybersecurity, C++ syntax, and Arduino IoT circuits.' },
+          { q: 'Can students play free on phones, tablets, or school Chromebooks?', a: 'Yes, all 30 games run directly in the browser on desktop and mobile touchscreens with zero downloads, zero ads, and full bilingual English/Romanian support.' }
+        ]
+      }
     },
     {
       dir: 'duel',
-      title: 'Arena Dueluri TIC 1v1: 21+ Competiții Live & Vice Leonida GTA 6 | ArkyEdu',
-      meta: 'Confruntări live multiplayer 1v1 între elevi sau cu AI Cyber-Bot: Vice Leonida 1v1 (GTA 6 Cyber-Heist), Cyber Battleship 1v1, File-Drop Attack Tetris Pro, System Sabotage, Cyber Clash Royale, C++ Code Racer & Binary Clash.',
-      keywords: 'dueluri tic 1v1, vice leonida 1v1 gta 6, cyber heist 1v1, competitii tehnologice scolare, cyber battleship 1v1, file drop attack tetris, system sabotage 1v1, binary clash 1v1, circuit clash arduino, c++ code racer',
-      h1: 'Arena Dueluri TIC 1v1: Peste 21 de Competiții Tehnologice Live',
-      appLink: 'https://www.arkyedu.com/#duel',
-      sectionTitle: 'Moduri Populare de Duel 1v1 (Live Cloud PvP & AI Cyber-Bot)',
-      cards: [
-        { icon: '🌴', title: 'Vice Leonida 1v1: Cyber-Heist Showdown (GTA 6)', desc: 'Cursă competitivă până la 2.500 puncte Vault pe autostrada Vice Beach cu Lucia & Jason, Boost Gates TIC și 4 sabotaje live: Drone 3★, Glitch, Throttle și Firewall Lock.', href: 'https://www.arkyedu.com/duel/vice-leonida-1v1/' },
-        { icon: '⚓', title: 'Cyber Battleship 1v1 (Bătălie Navală 10×10)', desc: '5 nave cibernetice + 2 Mine EMP, Railgun, Scanare Sonar 3×3, Bombă Cluster +, Torpile H/V și Nano-Reparație cu Scut.' },
-        { icon: '🧱', title: 'File-Drop Attack 1v1 (Tetris Pro)', desc: 'SRS Wall-Kicks, T-Spin, Back-to-Back și atacuri live DDoS, Overclock x2.2, Scramble & Defrag Purge.' },
-        { icon: '🛸', title: 'System Sabotage 1v1 (Stil Among Us)', desc: 'Repară 8 sisteme ale navei înaintea rivalului și declanșează sabotaje live: Stinge Lumina, Adware, Criogenare, Meltdown.' },
-        { icon: '👑', title: 'Cyber Clash Royale 1v1', desc: 'Strategie în timp real pe 2 benzi cu turnuri defensive, energie tactică și unități de atac cibernetic.' },
-        { icon: '💻', title: 'C++ Code Racer & Binary Clash 1v1', desc: 'Depanare algoritmi C++17 contra cronometru și conversii zecimal-binar pe 8 biți cu bonus de streak.' },
-        { icon: '🔌', title: 'Circuit Clash & Network Packet Racer', desc: 'Cablare senzori Arduino Uno Smart City fără scurtcircuit și rutare pachete pe porturi HTTPS/DNS/SSH.' }
-      ],
-      faqs: [
-        { q: 'Cum se pot duela elevii 1v1 de pe calculatoare diferite sau pe același ecran?', a: 'Fiecare duel permite crearea unei camere private cu cod unic din 4 caractere (sincronizată în timp real prin cloud) sau antrenament solo contra AI Cyber-Bot.' },
-        { q: 'Contribuie duelurile 1v1 la punctajul elevului?', a: 'Da, victoriile sunt înregistrate în profilul elevului (puncte XP și trofee pe fiecare mod) și pot fi vizualizate în clasamentele școlare.' }
-      ]
+      ro: {
+        title: 'Arena Dueluri TIC 1v1: 21+ Competiții Live & Vice Leonida GTA 6 | ArkyEdu',
+        meta: 'Confruntări live multiplayer 1v1 între elevi sau cu AI Cyber-Bot: Vice Leonida 1v1 (GTA 6 Cyber-Heist), Cyber Battleship 1v1, File-Drop Attack Tetris Pro, System Sabotage, Cyber Clash Royale, C++ Code Racer & Binary Clash.',
+        keywords: 'dueluri tic 1v1, vice leonida 1v1 gta 6, cyber heist 1v1, competitii tehnologice scolare, cyber battleship 1v1, file drop attack tetris, system sabotage 1v1, binary clash 1v1, circuit clash arduino, c++ code racer',
+        h1: 'Arena Dueluri TIC 1v1: Peste 21 de Competiții Tehnologice Live',
+        appLink: 'https://www.arkyedu.com/#duel',
+        sectionTitle: 'Moduri Populare de Duel 1v1 (Live Cloud PvP & AI Cyber-Bot)',
+        ctaPrimary: '🚀 Deschide Simulatorul Live',
+        ctaSecondary: '⚖️ Vezi Comparația cu Cursurile Private',
+        ctaLaunchTop: '⚔️ Lansează DUEL 1V1',
+        faqHeading: '❓ Întrebări Frecvente',
+        blogSectionTitle: '📚 Ghiduri Practice din Blog Conectate cu DUEL',
+        blogAllLabel: `Toate cele ${BLOG_ARTICLES.length} ghiduri →`,
+        blogReadMore: 'Citește ghidul complet →',
+        cardCtaDefault: 'Lansează în Aplicație →',
+        cardCtaHref: 'Detalii &amp; Lansează Duelul →',
+        cards: [
+          { icon: '🌴', title: 'Vice Leonida 1v1: Cyber-Heist Showdown (GTA 6)', desc: 'Cursă competitivă până la 2.500 puncte Vault pe autostrada Vice Beach cu Lucia & Jason, Boost Gates TIC și 4 sabotaje live: Drone 3★, Glitch, Throttle și Firewall Lock.', href: 'https://www.arkyedu.com/duel/vice-leonida-1v1/' },
+          { icon: '⚓', title: 'Cyber Battleship 1v1 (Bătălie Navală 10×10)', desc: '5 nave cibernetice + 2 Mine EMP, Railgun, Scanare Sonar 3×3, Bombă Cluster +, Torpile H/V și Nano-Reparație cu Scut.' },
+          { icon: '🧱', title: 'File-Drop Attack 1v1 (Tetris Pro)', desc: 'SRS Wall-Kicks, T-Spin, Back-to-Back și atacuri live DDoS, Overclock x2.2, Scramble & Defrag Purge.' },
+          { icon: '🛸', title: 'System Sabotage 1v1 (Stil Among Us)', desc: 'Repară 8 sisteme ale navei înaintea rivalului și declanșează sabotaje live: Stinge Lumina, Adware, Criogenare, Meltdown.' },
+          { icon: '👑', title: 'Cyber Clash Royale 1v1', desc: 'Strategie în timp real pe 2 benzi cu turnuri defensive, energie tactică și unități de atac cibernetic.' },
+          { icon: '💻', title: 'C++ Code Racer & Binary Clash 1v1', desc: 'Depanare algoritmi C++17 contra cronometru și conversii zecimal-binar pe 8 biți cu bonus de streak.' },
+          { icon: '🔌', title: 'Circuit Clash & Network Packet Racer', desc: 'Cablare senzori Arduino Uno Smart City fără scurtcircuit și rutare pachete pe porturi HTTPS/DNS/SSH.' }
+        ],
+        faqs: [
+          { q: 'Cum se pot duela elevii 1v1 de pe calculatoare diferite sau pe același ecran?', a: 'Fiecare duel permite crearea unei camere private cu cod unic din 4 caractere (sincronizată în timp real prin cloud) sau antrenament solo contra AI Cyber-Bot.' },
+          { q: 'Contribuie duelurile 1v1 la punctajul elevului?', a: 'Da, victoriile sunt înregistrate în profilul elevului (puncte XP și trofee pe fiecare mod) și pot fi vizualizate în clasamentele școlare.' }
+        ]
+      },
+      en: {
+        title: '1v1 Live Coding & Tech Duels Arena (21+ Modes) | ArkyEdu',
+        meta: 'Compete live 1v1 against classmates or AI Cyber-Bot: Vice Leonida 1v1 (GTA 6 Cyber-Heist), Cyber Battleship 1v1, File-Drop Attack Tetris Pro, System Sabotage, Cyber Clash Royale, C++ Code Racer & Binary Clash.',
+        keywords: '1v1 coding duels kids, multiplayer tech classroom game, vice leonida 1v1 gta 6 duel, cyber battleship browser game, c++ code racer 1v1, binary clash game, arduino circuit clash, ArkyEdu duel arena',
+        h1: '1v1 Live Tech Duels Arena: 21+ Real-Time Coding Competitions',
+        appLink: 'https://www.arkyedu.com/en/#duel',
+        sectionTitle: 'Popular 1v1 Duel Modes (Live Cloud PvP &amp; AI Cyber-Bot)',
+        ctaPrimary: '🚀 Enter Live 1v1 Arena',
+        ctaSecondary: '🎮 Browse 30 Arcade Games',
+        ctaLaunchTop: '⚔️ Enter DUEL ARENA',
+        faqHeading: '❓ Frequently Asked Questions',
+        blogSectionTitle: '📚 Study Guides Connected to DUEL ARENA',
+        blogAllLabel: `All ${BLOG_ARTICLES.length} English guides →`,
+        blogReadMore: 'Read complete guide →',
+        cardCtaDefault: 'Play in Duel Arena →',
+        cardCtaHref: 'Details &amp; Launch Duel →',
+        cards: [
+          { icon: '🌴', title: 'Vice Leonida 1v1: Cyber-Heist Showdown (GTA 6)', desc: 'Competitive sprint to 2,500 Vault Points along Vice Beach Highway with Lucia & Jason, ICT Boost Gates, and 4 live sabotages: Drone 3★, Glitch, Throttle & Firewall Lock.', href: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/' },
+          { icon: '⚓', title: 'Cyber Battleship 1v1 (10×10 Tactical Grid)', desc: '5 cyber warships + 2 EMP Mines, Railgun strikes, 3×3 Sonar Sweep, Cluster+ Bombs, H/V Torpedoes & Nano-Repair Shield.' },
+          { icon: '🧱', title: 'File-Drop Attack 1v1 (Tetris Pro)', desc: 'SRS Wall-Kicks, T-Spins, Back-to-Back combos, and live DDoS, Overclock x2.2, Scramble & Defrag Purge attacks.' },
+          { icon: '🛸', title: 'System Sabotage 1v1 (Among Us Inspired)', desc: 'Repair 8 critical ship systems faster than your rival while triggering Blackout, Adware, Cryo-Freeze, or Meltdown sabotages.' },
+          { icon: '👑', title: 'Cyber Clash Royale 1v1', desc: 'Real-time 2-lane tactical duel with defensive firewall towers, energy management, and cyber unit deployments.' },
+          { icon: '💻', title: 'C++ Code Racer & Binary Clash 1v1', desc: 'Timed C++17 algorithm debugging sprints and 8-bit decimal-to-binary conversion battles with streak multipliers.' },
+          { icon: '🔌', title: 'Circuit Clash & Network Packet Racer', desc: 'Short-circuit-free Arduino Uno Smart City sensor wiring and live packet routing across HTTPS/DNS/SSH ports.' }
+        ],
+        faqs: [
+          { q: 'How can students duel 1v1 from different computers or tablets?', a: 'Every mode lets you host a private real-time cloud room with a 4-character invite code, or practice immediately solo against an adaptive AI Cyber-Bot.' },
+          { q: 'Do 1v1 duels award student XP and trophies?', a: 'Yes! Victories add XP and mode-specific trophies to the student profile and classroom leaderboards.' }
+        ]
+      }
     },
     {
       dir: 'profesor',
-      title: 'Portal Profesor TIC: Catalog Digital, Bareme Oficiale & Notare Automată | ArkyEdu',
-      meta: 'Instrument didactic gratuit pentru profesori de informatică și TIC: catalog digital, evaluare automată pe bareme 1–10, urmărire progres elevi, export PDF și conformitate OMEN 3393/2017 & OM 5420/2024.',
-      keywords: 'catalog digital tic, portal profesor informatica, bareme didactice tic gimnaziu, fise de lucru tic clasa 5 6 7 8, omen 3393 2017 manual art klett, platforma gratuita profesori tic',
-      h1: 'Portalul Profesorului de TIC: Resurse Didactice & Catalog Digital',
-      appLink: 'https://www.arkyedu.com/#profesor',
-      sectionTitle: 'Funcționalități Dedicate Profesorilor de Informatică și TIC',
-      cards: [
-        { icon: '📊', title: 'Catalog Digital & Evaluare 1–10', desc: 'Calcul automat al mediilor și notelor de la 1 la 10 pe baza baremelor oficiale pentru toate cele 40 de module.' },
-        { icon: '🏫', title: 'Management Multi-Școală & GDPR', desc: 'Izolare sigură pe școli și clase, coduri rapide de acces pentru elevi și protecție totală a datelor minorilor.' },
-        { icon: '📄', title: 'Export Condică & Diplome Oficiale', desc: 'Export rapid în format imprimabil PDF / foaie de calcul și verificare diplome de merit cu cod unic.' },
-        { icon: '🎮', title: 'Control Laborator & Misiuni Arcade', desc: 'Posibilitate de activare sau blocare temporară a jocurilor arcade în timpul testelor și orelor de curs.' }
-      ],
-      faqs: [
-        { q: 'Este Portalul Profesorului gratuit pentru școlile de stat și private?', a: 'Da, 100% gratuit pentru orice cadru didactic de Informatică și TIC din România și din străinătate, fără limită de elevi sau clase.' },
-        { q: 'Cum se aliniează evaluările la programa Ministerului Educației?', a: 'Fiecare modul acoperă competențele specifice din OMEN 3393/2017 și OM 5420/2024, manualele Art Klett 2025, Litera și EDP.' }
-      ]
+      ro: {
+        title: 'Portal Profesor TIC: Catalog Digital, Bareme Oficiale & Notare Automată | ArkyEdu',
+        meta: 'Instrument didactic gratuit pentru profesori de informatică și TIC: catalog digital, evaluare automată pe bareme 1–10, urmărire progres elevi, export PDF și conformitate OMEN 3393/2017 & OM 5420/2024.',
+        keywords: 'catalog digital tic, portal profesor informatica, bareme didactice tic gimnaziu, fise de lucru tic clasa 5 6 7 8, omen 3393 2017 manual art klett, platforma gratuita profesori tic',
+        h1: 'Portalul Profesorului de TIC: Resurse Didactice &amp; Catalog Digital',
+        appLink: 'https://www.arkyedu.com/#profesor',
+        sectionTitle: 'Funcționalități Dedicate Profesorilor de Informatică și TIC',
+        ctaPrimary: '🚀 Deschide Simulatorul Live',
+        ctaSecondary: '⚖️ Vezi Comparația cu Cursurile Private',
+        ctaLaunchTop: '👩‍🏫 Lansează PROFESOR',
+        faqHeading: '❓ Întrebări Frecvente',
+        blogSectionTitle: '📚 Ghiduri Practice din Blog Conectate cu PROFESOR',
+        blogAllLabel: `Toate cele ${BLOG_ARTICLES.length} ghiduri →`,
+        blogReadMore: 'Citește ghidul complet →',
+        cardCtaDefault: 'Lansează în Aplicație →',
+        cardCtaHref: 'Detalii &amp; Lansează →',
+        cards: [
+          { icon: '📊', title: 'Catalog Digital & Evaluare 1–10', desc: 'Calcul automat al mediilor și notelor de la 1 la 10 pe baza baremelor oficiale pentru toate cele 40 de module.' },
+          { icon: '🏫', title: 'Management Multi-Școală & GDPR', desc: 'Izolare sigură pe școli și clase, coduri rapide de acces pentru elevi și protecție totală a datelor minorilor.' },
+          { icon: '📄', title: 'Export Condică & Diplome Oficiale', desc: 'Export rapid în format imprimabil PDF / foaie de calcul și verificare diplome de merit cu cod unic.' },
+          { icon: '🎮', title: 'Control Laborator & Misiuni Arcade', desc: 'Posibilitate de activare sau blocare temporară a jocurilor arcade în timpul testelor și orelor de curs.' }
+        ],
+        faqs: [
+          { q: 'Este Portalul Profesorului gratuit pentru școlile de stat și private?', a: 'Da, 100% gratuit pentru orice cadru didactic de Informatică și TIC din România și din străinătate, fără limită de elevi sau clase.' },
+          { q: 'Cum se aliniează evaluările la programa Ministerului Educației?', a: 'Fiecare modul acoperă competențele specifice din OMEN 3393/2017 și OM 5420/2024, manualele Art Klett 2025, Litera și EDP.' }
+        ]
+      },
+      en: {
+        title: 'ICT Teacher Portal: Digital Gradebook, Rubrics 1–10 & Auto-Grading | ArkyEdu',
+        meta: '100% free classroom management portal for Computer Science & ICT teachers: automated 1–10 rubric grading across 40 modules, GDPR-compliant class isolation, printable A4 worksheets, and CSV/PDF gradebook exports.',
+        keywords: 'free ict teacher portal, digital gradebook coding class, automated grading rubrics 1-10, gdpr student classroom tracker, printable coding worksheets grades 5-8, ArkyEdu teacher dashboard',
+        h1: 'ICT Teacher Portal: Digital Gradebook &amp; Classroom Lab Control',
+        appLink: 'https://www.arkyedu.com/en/#profesor',
+        sectionTitle: 'Built for Computer Science &amp; ICT Educators',
+        ctaPrimary: '🚀 Open Teacher Portal',
+        ctaSecondary: '📝 Browse 16 Printable Worksheets',
+        ctaLaunchTop: '👩‍🏫 Open TEACHER PORTAL',
+        faqHeading: '❓ Frequently Asked Questions',
+        blogSectionTitle: '📚 Educator Guides Connected to TEACHER PORTAL',
+        blogAllLabel: `All ${BLOG_ARTICLES.length} English guides →`,
+        blogReadMore: 'Read complete guide →',
+        cardCtaDefault: 'Open in Teacher Portal →',
+        cardCtaHref: 'Details &amp; Launch →',
+        cards: [
+          { icon: '📊', title: 'Digital Gradebook & Automated 1–10 Rubrics', desc: 'Automatic calculation of averages and 1–10 grades using standardized 100-point rubrics across all 40 interactive modules.' },
+          { icon: '🏫', title: 'Multi-School Isolation & GDPR Safety', desc: 'Secure per-school and per-class data isolation, 4-character quick join codes, and strict student privacy compliance.' },
+          { icon: '📄', title: 'Gradebook Export & Verifiable Certificates', desc: 'One-click printable PDF / spreadsheet exports plus unique-code verification for earned student merit diplomas.' },
+          { icon: '🎮', title: 'Classroom Lab & Arcade Lock Controls', desc: 'Temporarily enable or lock arcade games per class during live tests, evaluations, and guided lab sessions.' }
+        ],
+        faqs: [
+          { q: 'Is the Teacher Portal free for both public and private schools?', a: 'Yes, 100% free for every Computer Science and ICT educator worldwide, with unlimited classes, students, and printable rubrics.' },
+          { q: 'Can teachers print worksheets and run live quizzes in class?', a: 'Yes! Teachers have access to 16 A4-printable bilingual worksheets with 100-point grading rubrics plus live classroom quiz rooms.' }
+        ]
+      }
     },
     {
       dir: 'oras',
-      title: 'Arkedo Smart City: Laborator Interactiv IoT, Robotică & Sisteme Inteligente | ArkyEdu',
-      meta: 'Simulator interactiv de oraș inteligent (Smart City) pentru clasa a VIII-a: iluminat public LDR+PIR PWM, barieră parcare cu servomotor SG90, alertă gaze MQ-2, ecran LCD 1602 I2C și stație meteo Arduino IoT.',
-      keywords: 'smart city tic clasa 8, simulator iot arduino, laborator robotica orase inteligente, proiect integrator clasa 8 art klett pag 99 108, arduino uno copii',
-      h1: 'Arkedo Smart City: Laborator Interactiv IoT & Robotică Urbană',
-      appLink: 'https://www.arkyedu.com/#oras',
-      sectionTitle: 'Subsisteme Smart City & Robotică Arduino Integrate',
-      cards: [
-        { icon: '💡', title: 'Iluminat Stradal Inteligent (LDR + PIR + PWM)', desc: 'Aprindere automată la lăsarea serii și modulare PWM la detectarea mișcării pietonilor pentru economie de energie.' },
-        { icon: '🚧', title: 'Barieră Parcare Automată (HC-SR04 + SG90)', desc: 'Măsurarea distanței cu senzor ultrasonic și acționarea precisă a servomotorului cu afișaj locuri libere.' },
-        { icon: '🚨', title: 'Senzor Gaz MQ-2 & Ecran LCD 1602 I2C', desc: 'Monitorizare continuă a calității aerului cu praguri de alertă, buzzer piezo și mesaje de stare pe I2C.' },
-        { icon: '🏙️', title: 'Orașul Digital al Elevului (ByteCoins & Upgrade)', desc: 'Elevii își construiesc propriul oraș tehnologic cu recompensele obținute din lecțiile de TIC.' }
-      ],
-      faqs: [
-        { q: 'Este nevoie de kit fizic Arduino pentru a folosi Arkedo Smart City?', a: 'Nu! Toți senzorii, conexiunile și logica de control (inclusiv multitasking cu millis()) sunt simulate interactiv direct în browser.' }
-      ]
+      ro: {
+        title: 'Arkedo Smart City: Laborator Interactiv IoT, Robotică & Sisteme Inteligente | ArkyEdu',
+        meta: 'Simulator interactiv de oraș inteligent (Smart City) pentru clasa a VIII-a: iluminat public LDR+PIR PWM, barieră parcare cu servomotor SG90, alertă gaze MQ-2, ecran LCD 1602 I2C și stație meteo Arduino IoT.',
+        keywords: 'smart city tic clasa 8, simulator iot arduino, laborator robotica orase inteligente, proiect integrator clasa 8 art klett pag 99 108, arduino uno copii',
+        h1: 'Arkedo Smart City: Laborator Interactiv IoT &amp; Robotică Urbană',
+        appLink: 'https://www.arkyedu.com/#oras',
+        sectionTitle: 'Subsisteme Smart City & Robotică Arduino Integrate',
+        ctaPrimary: '🚀 Deschide Simulatorul Live',
+        ctaSecondary: '⚖️ Vezi Comparația cu Cursurile Private',
+        ctaLaunchTop: '🏙️ Lansează ORAS SMART',
+        faqHeading: '❓ Întrebări Frecvente',
+        blogSectionTitle: '📚 Ghiduri Practice din Blog Conectate cu ORAS',
+        blogAllLabel: `Toate cele ${BLOG_ARTICLES.length} ghiduri →`,
+        blogReadMore: 'Citește ghidul complet →',
+        cardCtaDefault: 'Lansează în Aplicație →',
+        cardCtaHref: 'Detalii &amp; Lansează →',
+        cards: [
+          { icon: '💡', title: 'Iluminat Stradal Inteligent (LDR + PIR + PWM)', desc: 'Aprindere automată la lăsarea serii și modulare PWM la detectarea mișcării pietonilor pentru economie de energie.' },
+          { icon: '🚧', title: 'Barieră Parcare Automată (HC-SR04 + SG90)', desc: 'Măsurarea distanței cu senzor ultrasonic și acționarea precisă a servomotorului cu afișaj locuri libere.' },
+          { icon: '🚨', title: 'Senzor Gaz MQ-2 & Ecran LCD 1602 I2C', desc: 'Monitorizare continuă a calității aerului cu praguri de alertă, buzzer piezo și mesaje de stare pe I2C.' },
+          { icon: '🏙️', title: 'Orașul Digital al Elevului (ByteCoins & Upgrade)', desc: 'Elevii își construiesc propriul oraș tehnologic cu recompensele obținute din lecțiile de TIC.' }
+        ],
+        faqs: [
+          { q: 'Este nevoie de kit fizic Arduino pentru a folosi Arkedo Smart City?', a: 'Nu! Toți senzorii, conexiunile și logica de control (inclusiv multitasking cu millis()) sunt simulate interactiv direct în browser.' }
+        ]
+      },
+      en: {
+        title: 'Arkedo Smart City: Interactive Arduino IoT & Robotics Lab | ArkyEdu',
+        meta: 'Browser-based Smart City IoT & Arduino Uno simulator for students (ages 10–15): LDR + PIR PWM street lighting, HC-SR04 ultrasonic + SG90 servo parking gate, MQ-2 gas alarm, LCD 1602 I2C display & city builder.',
+        keywords: 'smart city iot simulator kids, arduino uno online simulator free, hc-sr04 servo sg90 virtual lab, ldr pir pwm arduino lesson, robotics stem kids browser, ArkyEdu smart city',
+        h1: 'Arkedo Smart City: Interactive Arduino IoT &amp; Robotics Lab',
+        appLink: 'https://www.arkyedu.com/en/#oras',
+        sectionTitle: 'Integrated Smart City IoT &amp; Arduino Uno Subsystems',
+        ctaPrimary: '🚀 Launch Smart City Lab',
+        ctaSecondary: '⚡ Open Visual CPU & Logic Lab',
+        ctaLaunchTop: '🏙️ Launch SMART CITY',
+        faqHeading: '❓ Frequently Asked Questions',
+        blogSectionTitle: '📚 Robotics & IoT Guides Connected to SMART CITY',
+        blogAllLabel: `All ${BLOG_ARTICLES.length} English guides →`,
+        blogReadMore: 'Read complete guide →',
+        cardCtaDefault: 'Launch in Smart City Lab →',
+        cardCtaHref: 'Details &amp; Launch →',
+        cards: [
+          { icon: '💡', title: 'Smart Street Lighting (LDR + PIR + PWM)', desc: 'Automatic dusk activation combined with PWM dimming triggered by pedestrian motion sensors for urban energy efficiency.' },
+          { icon: '🚧', title: 'Automated Parking Gate (HC-SR04 + SG90)', desc: 'Real-time ultrasonic distance measurement driving a precision SG90 servo gate and live free-slot counter.' },
+          { icon: '🚨', title: 'MQ-2 Gas Sensor & LCD 1602 I2C Monitor', desc: 'Continuous air-quality telemetry with threshold alerts, piezo buzzer alarms, and live I2C status readouts.' },
+          { icon: '🏙️', title: 'Student Cyber City Builder (ByteCoins & Upgrades)', desc: 'Students construct and upgrade their own high-tech city district using ByteCoins earned from ICT missions.' }
+        ],
+        faqs: [
+          { q: 'Do students need a physical Arduino kit to use Arkedo Smart City?', a: 'No! Every sensor, wiring node, and control loop (including non-blocking millis() multitasking) runs interactively in the browser.' }
+        ]
+      }
     }
   ];
 
   hubs.forEach(h => {
-    const hubDir = path.join(publicDir, h.dir);
-    ensureDir(hubDir);
-
-    const canonicalUrl = `https://www.arkyedu.com/${h.dir}/`;
+    const roCanonicalUrl = `https://www.arkyedu.com/${h.dir}/`;
+    const enCanonicalUrl = `https://www.arkyedu.com/${h.dir}/en/`;
     const hubOgImage = (h.dir === 'arcade' || h.dir === 'duel')
       ? 'https://www.arkyedu.com/assets/og-arcade-duel.jpg'
       : 'https://www.arkyedu.com/og-cover.png';
 
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "CollectionPage",
-          "@id": `${canonicalUrl}#webpage`,
-          "name": h.title,
-          "description": h.meta,
-          "url": canonicalUrl,
-          "image": hubOgImage,
-          "inLanguage": ["ro", "en"],
-          "isPartOf": { "@id": "https://www.arkyedu.com/#website" }
-        },
-        {
-          "@type": "ItemList",
-          "name": h.sectionTitle,
-          "itemListElement": h.cards.map((c, idx) => ({
-            "@type": "ListItem",
-            "position": idx + 1,
-            "name": c.title,
-            "description": c.desc
-          }))
-        },
-        {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Acasă", "item": "https://www.arkyedu.com/" },
-            { "@type": "ListItem", "position": 2, "name": h.h1, "item": canonicalUrl }
-          ]
-        },
-        ...(h.faqs.length > 0 ? [{
-          "@type": "FAQPage",
-          "mainEntity": h.faqs.map(f => ({
-            "@type": "Question",
-            "name": f.q,
-            "acceptedAnswer": { "@type": "Answer", "text": f.a }
-          }))
-        }] : [])
-      ]
-    };
+    const locales: Array<{ isEn: boolean; data: HubLocaleContent; outDir: string; canonicalUrl: string }> = [
+      { isEn: false, data: h.ro, outDir: path.join(publicDir, h.dir), canonicalUrl: roCanonicalUrl },
+      { isEn: true, data: h.en, outDir: path.join(publicDir, h.dir, 'en'), canonicalUrl: enCanonicalUrl },
+    ];
 
-    const htmlContent = `<!DOCTYPE html>
-<html lang="ro">
+    locales.forEach(({ isEn, data, outDir, canonicalUrl }) => {
+      ensureDir(outDir);
+
+      const jsonLd = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "CollectionPage",
+            "@id": `${canonicalUrl}#webpage`,
+            "name": data.title,
+            "description": data.meta,
+            "url": canonicalUrl,
+            "image": hubOgImage,
+            "inLanguage": isEn ? "en" : "ro",
+            "isPartOf": { "@id": isEn ? "https://www.arkyedu.com/en/#website" : "https://www.arkyedu.com/#website" }
+          },
+          {
+            "@type": "ItemList",
+            "name": data.sectionTitle.replace(/&amp;/g, '&'),
+            "itemListElement": data.cards.map((c, idx) => ({
+              "@type": "ListItem",
+              "position": idx + 1,
+              "name": c.title,
+              "description": c.desc
+            }))
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": isEn ? "Home" : "Acasă", "item": isEn ? "https://www.arkyedu.com/en/" : "https://www.arkyedu.com/" },
+              { "@type": "ListItem", "position": 2, "name": data.h1.replace(/&amp;/g, '&'), "item": canonicalUrl }
+            ]
+          },
+          ...(data.faqs.length > 0 ? [{
+            "@type": "FAQPage",
+            "mainEntity": data.faqs.map(f => ({
+              "@type": "Question",
+              "name": f.q,
+              "acceptedAnswer": { "@type": "Answer", "text": f.a }
+            }))
+          }] : [])
+        ]
+      };
+
+      const secondaryHref = isEn
+        ? (h.dir === 'duel' ? 'https://www.arkyedu.com/arcade/en/' : h.dir === 'profesor' ? 'https://www.arkyedu.com/fise/en/' : h.dir === 'oras' ? 'https://www.arkyedu.com/laborator-algoritmi/en/' : 'https://www.arkyedu.com/sandbox/en/')
+        : 'https://www.arkyedu.com/comparatie-scoli-private/';
+
+      const relatedArticles = (h.dir === 'profesor'
+        ? BLOG_ARTICLES.filter(a => ['ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu', 'inteligenta-artificiala-chatgpt-scoala-gimnaziu'].includes(a.id))
+        : h.dir === 'oras'
+        ? BLOG_ARTICLES.filter(a => ['proiect-arduino-smart-home-gimnaziu-senzori-millis', 'primul-site-web-clasa-8-html5-https-google-sites'].includes(a.id))
+        : BLOG_ARTICLES.filter(a => ['erori-cpp-gimnaziu-if-while-algoritmi-cifre', 'siguranta-copii-tiktok-roblox-discord-phishing-2fa'].includes(a.id))
+      );
+
+      const htmlContent = `<!DOCTYPE html>
+<html lang="${isEn ? 'en' : 'ro'}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${h.title}</title>
-  <meta name="description" content="${h.meta}">
-  <meta name="keywords" content="${h.keywords}">
+  <title>${data.title}</title>
+  <meta name="description" content="${data.meta}">
+  <meta name="keywords" content="${data.keywords}">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="${canonicalUrl}">
-  <link rel="alternate" hreflang="ro" href="${canonicalUrl}">
-  <link rel="alternate" hreflang="x-default" href="${canonicalUrl}">
+  <link rel="alternate" hreflang="ro" href="${roCanonicalUrl}">
+  <link rel="alternate" hreflang="en" href="${enCanonicalUrl}">
+  <link rel="alternate" hreflang="x-default" href="${roCanonicalUrl}">
   <meta name="theme-color" content="#090d16">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="${h.title}">
-  <meta property="og:description" content="${h.meta}">
+  <meta property="og:title" content="${data.title}">
+  <meta property="og:description" content="${data.meta}">
   <meta property="og:url" content="${canonicalUrl}">
   <meta property="og:site_name" content="ArkyEdu TIC & Arcade">
-  <meta property="og:locale" content="ro_RO">
+  <meta property="og:locale" content="${isEn ? 'en_US' : 'ro_RO'}">
+  <meta property="og:locale:alternate" content="${isEn ? 'ro_RO' : 'en_US'}">
   <meta property="og:image" content="${hubOgImage}">
   ${hubOgImage.endsWith('og-cover.png') ? '<meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">' : ''}
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="${h.title}">
-  <meta name="twitter:description" content="${h.meta}">
+  <meta name="twitter:title" content="${data.title}">
+  <meta name="twitter:description" content="${data.meta}">
   <meta name="twitter:image" content="${hubOgImage}">
   <link rel="alternate" type="application/rss+xml" title="ArkyEdu Blog &amp; Ghiduri TIC (RSS)" href="https://www.arkyedu.com/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1592,11 +1804,22 @@ ${commonStyles}
 <body>
   <header>
     <div class="container header-content">
-      <a href="https://www.arkyedu.com/" class="logo-box">
+      <a href="${isEn ? 'https://www.arkyedu.com/en/' : 'https://www.arkyedu.com/'}" class="logo-box">
         <div class="logo-icon">🚀</div>
         <span class="logo-text">ArkyEdu <span style="color: var(--accent);">${h.dir.toUpperCase()}</span></span>
       </a>
       <nav class="nav-links">
+        ${isEn ? `
+        <a href="https://www.arkyedu.com/en/">Home</a>
+        <a href="https://www.arkyedu.com/blog/en/">Guides</a>
+        <a href="https://www.arkyedu.com/fise/en/">Worksheets</a>
+        <a href="https://www.arkyedu.com/sandbox/en/">Sandbox</a>
+        <a href="https://www.arkyedu.com/arcade/en/">Arcade (30)</a>
+        <a href="https://www.arkyedu.com/leonida/en/">Vice Leonida</a>
+        <a href="https://www.arkyedu.com/duel/en/">Duel 1v1</a>
+        <a href="https://www.arkyedu.com/oras/en/">Smart City</a>
+        <a href="${roCanonicalUrl}" hreflang="ro" style="color: var(--accent); font-weight: 800;">RO</a>
+        ` : `
         <a href="https://www.arkyedu.com/clasa-5/">Clasa 5</a>
         <a href="https://www.arkyedu.com/clasa-6/">Clasa 6</a>
         <a href="https://www.arkyedu.com/clasa-7/">Clasa 7</a>
@@ -1606,10 +1829,11 @@ ${commonStyles}
         <a href="https://www.arkyedu.com/arcade/">Arcade (30)</a>
         <a href="https://www.arkyedu.com/leonida/">Vice Leonida GTA 6</a>
         <a href="https://www.arkyedu.com/duel/">Duel 1v1</a>
-        <a href="https://www.arkyedu.com/educatie-tehnologie-copii/">Ghid Copii</a>
+        <a href="${enCanonicalUrl}" hreflang="en" style="color: var(--accent); font-weight: 800;">EN</a>
+        `}
       </nav>
-      <a href="${h.appLink}" class="nav-cta">
-        <span>🎮 Lansează ${h.dir.toUpperCase()}</span>
+      <a href="${data.appLink}" class="nav-cta">
+        <span>${data.ctaLaunchTop}</span>
       </a>
     </div>
   </header>
@@ -1617,31 +1841,31 @@ ${commonStyles}
   <main class="container">
     <div class="hero-section">
       <div class="badge-bar">
-        <span class="badge badge-green">100% Interactiv în Browser</span>
-        <span class="badge badge-free">0 Lei — Fără Înregistrare Obligatorie</span>
-        <span class="badge">Bilingv RO / EN</span>
+        <span class="badge badge-green">${isEn ? '100% Interactive in Browser' : '100% Interactiv în Browser'}</span>
+        <span class="badge badge-free">${isEn ? '100% Free — No Sign-Up Required' : '0 Lei — Fără Înregistrare Obligatorie'}</span>
+        <span class="badge">${isEn ? 'Bilingual EN / RO' : 'Bilingv RO / EN'}</span>
       </div>
-      <h1>${h.h1}</h1>
-      <p class="lead-text">${h.meta}</p>
+      <h1>${data.h1}</h1>
+      <p class="lead-text">${data.meta}</p>
       <div class="cta-group">
-        <a href="${h.appLink}" class="btn-primary">
-          <span>🚀 Deschide Simulatorul Live</span>
+        <a href="${data.appLink}" class="btn-primary">
+          <span>${data.ctaPrimary}</span>
         </a>
-        <a href="https://www.arkyedu.com/comparatie-scoli-private/" class="btn-secondary">
-          <span>⚖️ Vezi Comparația cu Cursurile Private</span>
+        <a href="${secondaryHref}" class="btn-secondary">
+          <span>${data.ctaSecondary}</span>
         </a>
       </div>
     </div>
 
     <section aria-labelledby="hub-section-title">
-      <h2 id="hub-section-title" style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">${h.sectionTitle}</h2>
+      <h2 id="hub-section-title" style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">${data.sectionTitle}</h2>
       <div class="grid-2">
-        ${h.cards.map((c: { icon: string; title: string; desc: string; href?: string }) => `
+        ${data.cards.map((c: HubCard) => `
           <div class="card">
             <div class="card-icon">${c.icon}</div>
             <h3 class="card-title">${c.title}</h3>
             <p class="card-desc">${c.desc}</p>
-            <a href="${c.href || h.appLink}" class="card-link">${c.href ? 'Detalii &amp; Lansează Jocul →' : 'Lansează în Aplicație →'}</a>
+            <a href="${c.href || data.appLink}" class="card-link">${c.href ? data.cardCtaHref : data.cardCtaDefault}</a>
           </div>
         `).join('')}
       </div>
@@ -1649,29 +1873,24 @@ ${commonStyles}
 
     <section style="margin-bottom: 2.5rem;">
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
-        <h2 style="font-size: 1.4rem;">📚 Ghiduri Practice din Blog Conectate cu ${h.dir.toUpperCase()}</h2>
-        <a href="https://www.arkyedu.com/blog/" class="card-link">Toate cele ${BLOG_ARTICLES.length} ghiduri →</a>
+        <h2 style="font-size: 1.4rem;">${data.blogSectionTitle}</h2>
+        <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}" class="card-link">${data.blogAllLabel}</a>
       </div>
       <div class="grid-2">
-        ${(h.dir === 'profesor'
-          ? BLOG_ARTICLES.filter(a => ['ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu', 'inteligenta-artificiala-chatgpt-scoala-gimnaziu'].includes(a.id))
-          : h.dir === 'oras'
-          ? BLOG_ARTICLES.filter(a => ['proiect-arduino-smart-home-gimnaziu-senzori-millis', 'primul-site-web-clasa-8-html5-https-google-sites'].includes(a.id))
-          : BLOG_ARTICLES.filter(a => ['erori-cpp-gimnaziu-if-while-algoritmi-cifre', 'siguranta-copii-tiktok-roblox-discord-phishing-2fa'].includes(a.id))
-        ).map(art => `
+        ${relatedArticles.map(art => `
           <div class="card">
-            <h3 class="card-title" style="font-size: 1.1rem;">${escapeHtmlText(art.ro.breadcrumbLabel)}</h3>
-            <p class="card-desc">${escapeHtmlText(art.ro.metaDescription)}</p>
-            <a href="https://www.arkyedu.com/blog/${art.ro.slug}/" class="card-link">Citește ghidul complet →</a>
+            <h3 class="card-title" style="font-size: 1.1rem;">${escapeHtmlText(isEn ? art.en.breadcrumbLabel : art.ro.breadcrumbLabel)}</h3>
+            <p class="card-desc">${escapeHtmlText(isEn ? art.en.metaDescription : art.ro.metaDescription)}</p>
+            <a href="${isEn ? `https://www.arkyedu.com/blog/en/${art.en.slug}/` : `https://www.arkyedu.com/blog/${art.ro.slug}/`}" class="card-link">${data.blogReadMore}</a>
           </div>
         `).join('')}
       </div>
     </section>
 
-    ${h.faqs.length > 0 ? `
+    ${data.faqs.length > 0 ? `
     <section style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 1.25rem; padding: 2rem; margin-bottom: 3rem;">
-      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">❓ Întrebări Frecvente</h2>
-      ${h.faqs.map(f => `
+      <h2 style="font-size: 1.5rem; margin-bottom: 1.25rem;">${data.faqHeading}</h2>
+      ${data.faqs.map(f => `
         <div class="faq-block">
           <div class="faq-question">${f.q}</div>
           <div class="faq-answer">${f.a}</div>
@@ -1683,18 +1902,24 @@ ${commonStyles}
   <footer>
     <div class="container">
       <div class="footer-bottom" style="border: none;">
-        <div>© 2026 ArkyEdu TIC. 100% Gratuit pentru educație digitală.</div>
-        <div><a href="https://www.arkyedu.com/" style="color: var(--accent);">Acasă</a> • <a href="https://www.arkyedu.com/blog/" style="color: var(--accent);">Blog &amp; Ghiduri TIC</a> • <a href="https://www.arkyedu.com/educatie-tehnologie-copii/" style="color: var(--accent);">Educație Tehnologie Copii</a> • <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a></div>
+        <div>${isEn ? '© 2026 ArkyEdu ICT. 100% Free for Digital & Coding Education.' : '© 2026 ArkyEdu TIC. 100% Gratuit pentru educație digitală.'}</div>
+        <div>
+          <a href="${isEn ? 'https://www.arkyedu.com/en/' : 'https://www.arkyedu.com/'}" style="color: var(--accent);">${isEn ? 'Home' : 'Acasă'}</a> •
+          <a href="${isEn ? 'https://www.arkyedu.com/blog/en/' : 'https://www.arkyedu.com/blog/'}" style="color: var(--accent);">${isEn ? 'Guides & Blog' : 'Blog &amp; Ghiduri TIC'}</a> •
+          <a href="${isEn ? roCanonicalUrl : enCanonicalUrl}" style="color: var(--accent);">${isEn ? 'Română' : 'English'}</a> •
+          <a href="https://www.arkyedu.com/sitemap.xml" style="color: var(--accent);">Sitemap</a>
+        </div>
       </div>
     </div>
   </footer>
 </body>
 </html>`;
 
-    fs.writeFileSync(path.join(hubDir, 'index.html'), htmlContent, 'utf-8');
+      fs.writeFileSync(path.join(outDir, 'index.html'), htmlContent, 'utf-8');
+    });
   });
 
-  console.log('Feature Hubs (arcade, duel, profesor, oras) generated with rich cards & JSON-LD.');
+  console.log('Bilingual Feature Hubs (arcade, duel, profesor, oras — RO & EN) generated with rich cards, hreflang & JSON-LD.');
 }
 
 // 5. GENERATE PILLAR LANDING PAGE (/educatie-tehnologie-copii/)
@@ -3722,6 +3947,7 @@ function generateSitemap() {
     { loc: 'https://www.arkyedu.com/clasa-8/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'TIC Clasa a VIII-a — Excel, HTML5, C++ & Arduino Smart Home' }] },
     { loc: 'https://www.arkyedu.com/comparatie-scoli-private/', priority: '0.95', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'ArkyEdu vs Școli Private de Coding — 100% Gratuit' }] },
     { loc: 'https://www.arkyedu.com/arcade/', priority: '0.92', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-arcade-duel.jpg', title: 'Arcade Didactic TIC: 30 Jocuri Retro & Vice Leonida' }] },
+    { loc: 'https://www.arkyedu.com/arcade/en/', priority: '0.90', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-arcade-duel.jpg', title: 'ICT Educational Arcade: 30 Retro Coding & Tech Games' }] },
     {
       loc: 'https://www.arkyedu.com/leonida/',
       priority: '0.97',
@@ -3761,10 +3987,13 @@ function generateSitemap() {
     { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/', priority: '0.93', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida VI: Cyber Runner (GTA 6 Arcade)' }] },
     { loc: 'https://www.arkyedu.com/arcade/vice-leonida-gta6/en/', priority: '0.90', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida VI: Cyber Runner English Edition' }] },
     { loc: 'https://www.arkyedu.com/duel/', priority: '0.92', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-arcade-duel.jpg', title: 'Arena Dueluri TIC 1v1 Live & Cyber-Bot' }] },
+    { loc: 'https://www.arkyedu.com/duel/en/', priority: '0.90', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-arcade-duel.jpg', title: '1v1 Live Tech & Coding Duels Arena (21+ Modes)' }] },
     { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/', priority: '0.93', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida 1v1: Cyber-Heist Showdown' }] },
     { loc: 'https://www.arkyedu.com/duel/vice-leonida-1v1/en/', priority: '0.90', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/leonida-hero.jpg', title: 'Vice Leonida 1v1 Showdown English Edition' }] },
     { loc: 'https://www.arkyedu.com/profesor/', priority: '0.88', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Portal Profesor TIC — Catalog Digital & Bareme 1–10' }] },
+    { loc: 'https://www.arkyedu.com/profesor/en/', priority: '0.86', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'ICT Teacher Portal — Digital Gradebook & Rubrics 1–10' }] },
     { loc: 'https://www.arkyedu.com/oras/', priority: '0.88', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Arkedo Smart City — Laborator IoT & Robotică Arduino' }] },
+    { loc: 'https://www.arkyedu.com/oras/en/', priority: '0.86', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/og-cover.png', title: 'Arkedo Smart City — Arduino IoT & Robotics Lab' }] },
     { loc: 'https://www.arkyedu.com/fise/', priority: '0.96', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-worksheets.jpg', title: 'Fișe de Lucru, Teste cu Barem 1–10 & Olimpiadă TIC' }] },
     { loc: 'https://www.arkyedu.com/fise/en/', priority: '0.92', changefreq: 'weekly', images: [{ loc: 'https://www.arkyedu.com/assets/og-worksheets.jpg', title: 'Bilingual ICT Worksheets, Exams & Grading Rubrics' }] },
     { loc: 'https://www.arkyedu.com/llms.txt', priority: '0.88', changefreq: 'weekly' },

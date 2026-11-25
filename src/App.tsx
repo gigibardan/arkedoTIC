@@ -338,12 +338,12 @@ function GameContent() {
     forceScrollToTop();
 
     if (newView === 'superadmin') window.history.pushState({}, '', '/superadmin');
-    else if (newView === 'teacher') window.history.pushState({}, '', '/profesor');
+    else if (newView === 'teacher') window.history.pushState({}, '', lang === 'en' ? '/profesor/en/' : '/profesor/');
     else if (newView === 'arcade') {
       setInitialArcadeGame(null);
-      window.history.pushState({}, '', '/arcade');
-    } else if (newView === 'duel') window.history.pushState({}, '', '/duel');
-    else if (newView === 'city') window.history.pushState({}, '', '/oras');
+      window.history.pushState({}, '', lang === 'en' ? '/arcade/en/' : '/arcade/');
+    } else if (newView === 'duel') window.history.pushState({}, '', lang === 'en' ? '/duel/en/' : '/duel/');
+    else if (newView === 'city') window.history.pushState({}, '', lang === 'en' ? '/oras/en/' : '/oras/');
     else if (newView === 'carnet') window.history.pushState({}, '', '/carnet');
     else if (newView === 'evaluare') window.history.pushState({}, '', '/evaluare');
     else if (newView === 'livequiz') window.history.pushState({}, '', '/quiz-live');

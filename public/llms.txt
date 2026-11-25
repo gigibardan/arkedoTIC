@@ -94,7 +94,7 @@ Toate cele 40 de module didactice includ sinteză teoretică, obiective curricul
 ---
 
 ## 2. Arcade Didactic TIC (30 Mini-jocuri Retro & Open-World Educative)
-Hub dedicat: https://www.arkyedu.com/arcade/ · Hub Univers GTA 6 Leonida: https://www.arkyedu.com/leonida/ (Markdown RAG: https://www.arkyedu.com/leonida-llm.txt)
+Hub dedicat RO: https://www.arkyedu.com/arcade/ · EN: https://www.arkyedu.com/arcade/en/ · Hub Univers GTA 6 Leonida: https://www.arkyedu.com/leonida/ (EN: https://www.arkyedu.com/leonida/en/ · Markdown RAG: https://www.arkyedu.com/leonida-llm.txt)
 
 0A. **Vice Leonida: Open-World Story (GTA 6 Sandbox 2D)** ([Pagină dedicată](https://www.arkyedu.com/leonida/)) — Joc open-world 2D complet în Statul Leonida (6 regiuni oficiale GTA 6: Vice City, Leonida Keys, Port Gellhorn, Grassrivers, Mount Kalaga, Ambrosia) cu Lucia Caminos & Jason Duval, 5 vehicule + Hydro-Airboat, urmăriri VCPD 1★–5★, garaje Safehouse, hartă GPS tactică și 6 misiuni de poveste TIC (Binar, C++, Excel, Arduino, HTML5).
 0B. **Vice Leonida VI: Cyber Runner (GTA 6 Tech Edition)** ([Pagină dedicată](https://www.arkyedu.com/arcade/vice-leonida-gta6/)) — Joc arcade futuristic în Statul Leonida (Vice Beach, Venetian Causeway, Port Gellhorn, Grassrivers Airboat) cu swap live între Lucia Caminos & Jason Duval, Nitro, EMP, Heat 1★–5★ și hack-uri binare pe 4 biți.
@@ -128,7 +128,7 @@ Hub dedicat: https://www.arkyedu.com/arcade/ · Hub Univers GTA 6 Leonida: https
 ---
 
 ## 3. Arena Dueluri Tehnologice 1v1 în Timp Real (21+ Moduri Multiplayer & AI Cyber-Bot)
-Hub dedicat: https://www.arkyedu.com/duel/
+Hub dedicat RO: https://www.arkyedu.com/duel/ · EN: https://www.arkyedu.com/duel/en/
 
 - Sincronizare live prin Firebase Firestore (camere cu cod din 4 caractere) + mod de antrenament cu **AI Cyber-Bot**.
 - Moduri emblematice:
@@ -142,8 +142,8 @@ Hub dedicat: https://www.arkyedu.com/duel/
 ---
 
 ## 4. Portalul Profesorului, Arkedo Smart City & Comparație vs Școli Private
-- **Portal Profesor & Catalog Digital**: https://www.arkyedu.com/profesor/ — Evaluare automată 1–10, export PDF/foaie de calcul, izolare multi-școală GDPR.
-- **Arkedo Smart City IoT**: https://www.arkyedu.com/oras/ — Oraș digital și simulator Arduino Smart City.
+- **Portal Profesor & Catalog Digital**: https://www.arkyedu.com/profesor/ (EN: https://www.arkyedu.com/profesor/en/) — Evaluare automată 1–10, export PDF/foaie de calcul, izolare multi-școală GDPR.
+- **Arkedo Smart City IoT**: https://www.arkyedu.com/oras/ (EN: https://www.arkyedu.com/oras/en/) — Oraș digital și simulator Arduino Smart City.
 - **Comparație cu Cursuri Private**: https://www.arkyedu.com/comparatie-scoli-private/ — **0 LEI vs 4.000–6.000 LEI/an**, aliniat programei școlare, acces 24/7.
 
 ---

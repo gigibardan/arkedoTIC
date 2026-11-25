@@ -77,7 +77,7 @@ Acest document furnizează contextul educațional, curricular, tehnic și compet
 ---
 
 ## 3. Arcade Didactic TIC (30 Jocuri Complete în Browser)
-Hub Arcade: https://www.arkyedu.com/arcade/ · Hub Univers Vice Leonida (GTA 6): https://www.arkyedu.com/leonida/
+Hub Arcade RO: https://www.arkyedu.com/arcade/ · EN: https://www.arkyedu.com/arcade/en/ · Hub Univers Vice Leonida (GTA 6): https://www.arkyedu.com/leonida/ (EN: https://www.arkyedu.com/leonida/en/)
 
 - **Flagship & Open-World GTA 6**: `Vice Leonida: Open-World Story` (Sandbox 2D cu 6 regiuni din Statul Leonida, 5 vehicule + Hydro-Airboat, VCPD 1★–5★, Lucia Caminos & Jason Duval — https://www.arkyedu.com/leonida/), `Vice Leonida VI: Cyber Runner` (GTA 6 Tech Edition — https://www.arkyedu.com/arcade/vice-leonida-gta6/), `Cyber Pac-Man`, `Cyber Arkanoid`, `Cyber Frogger`, `Cyber Sokoban`, `Cyber Asteroids`, `Cyber Invaders`, `Cyber Dino Rush`, `Cyber Snake`.
 - **Hardware, Electronică & Robotică**: `Circuit Master 80s`, `PC Builder Pro`, `Redstone Logic Lab`, `Minecraft Voxel Architect`.
@@ -87,7 +87,7 @@ Hub Arcade: https://www.arkyedu.com/arcade/ · Hub Univers Vice Leonida (GTA 6):
 ---
 
 ## 4. Arena Dueluri 1v1 Multiplayer & AI Cyber-Bot (21+ Moduri Live)
-Hub Dueluri: https://www.arkyedu.com/duel/
+Hub Dueluri RO: https://www.arkyedu.com/duel/ · EN: https://www.arkyedu.com/duel/en/
 
 - **Flagship, Strategie & Tactici Cyber**: `Vice Leonida 1v1` (GTA 6 Cyber-Heist Showdown — https://www.arkyedu.com/duel/vice-leonida-1v1/), `Cyber Battleship 1v1` (grilă 10×10, Sonar 3×3, Torpile H/V, Mine EMP, Nano-Scut), `File-Drop Attack 1v1` (Tetris cu SRS Wall-Kicks, T-Spin & atacuri DDoS/Overclock), `System Sabotage 1v1` (8 sisteme de reparat + sabotaje stil Among Us), `Cyber Clash Royale 1v1`.
 - **Coding, Hardware & Rețelistică**: `C++ Code Racer 1v1`, `Binary Clash 1v1`, `Circuit Clash Arduino`, `Circuit Overdrive`, `Network Packet Racer 1v1`, `Hacker vs Defender 1v1`, `Block Coding Scratch Duel`, `PC Hardware Rush`, `Pixel Art Sprite Clash`, `Cyber Shield`, `File Organizer Battle`.

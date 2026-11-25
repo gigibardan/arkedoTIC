@@ -42,9 +42,27 @@ function buildSpaSafeReloadUrl(rawHref: string): string {
   if (path === '/arcade' && !url.searchParams.has('game') && !url.searchParams.has('arcade')) {
     url.pathname = '/';
     url.searchParams.set('arcade', '1');
+  } else if (path === '/arcade/en' && !url.searchParams.has('game') && !url.searchParams.has('arcade')) {
+    url.pathname = '/en/';
+    url.searchParams.set('arcade', '1');
   } else if (path === '/duel' && !url.searchParams.has('mode') && !url.searchParams.has('duel')) {
     url.pathname = '/';
     url.searchParams.set('duel', '1');
+  } else if (path === '/duel/en' && !url.searchParams.has('mode') && !url.searchParams.has('duel')) {
+    url.pathname = '/en/';
+    url.searchParams.set('duel', '1');
+  } else if (path === '/oras') {
+    url.pathname = '/';
+    url.hash = '#oras';
+  } else if (path === '/oras/en') {
+    url.pathname = '/en/';
+    url.hash = '#oras';
+  } else if (path === '/profesor') {
+    url.pathname = '/';
+    url.hash = '#profesor';
+  } else if (path === '/profesor/en') {
+    url.pathname = '/en/';
+    url.hash = '#profesor';
   } else if (path === '/leonida') {
     url.pathname = '/';
     url.searchParams.set('view', 'leonida');

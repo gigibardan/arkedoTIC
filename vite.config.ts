@@ -68,6 +68,10 @@ function buildEnglishIndexHtml(roHtml: string): string {
           { '@type': 'CollectionPage', name: 'ICT & Coding Blog Guides (24 Guides)', url: 'https://www.arkyedu.com/blog/en/' },
           { '@type': 'DefinedTermSet', name: 'Bilingual CS & ICT Glossary (44 Terms)', url: 'https://www.arkyedu.com/glosar/en/' },
           { '@type': 'WebApplication', name: 'Live Code Sandbox C++ / Python / HTML5', url: 'https://www.arkyedu.com/sandbox/en/' },
+          { '@type': 'CollectionPage', name: 'ICT Educational Arcade (30 Games)', url: 'https://www.arkyedu.com/arcade/en/' },
+          { '@type': 'CollectionPage', name: '1v1 Live Coding Duels Arena (21+ Modes)', url: 'https://www.arkyedu.com/duel/en/' },
+          { '@type': 'WebApplication', name: 'Arkedo Smart City Arduino IoT Lab', url: 'https://www.arkyedu.com/oras/en/' },
+          { '@type': 'WebApplication', name: 'ICT Teacher Portal & Digital Gradebook', url: 'https://www.arkyedu.com/profesor/en/' },
           { '@type': 'WebApplication', name: 'Vice Leonida Open-World GTA 6 Sandbox 2D', url: 'https://www.arkyedu.com/leonida/en/' },
           { '@type': 'WebApplication', name: 'Interactive AI Literacy & Deepfake Lab', url: 'https://www.arkyedu.com/laborator-ai/en/' },
           { '@type': 'WebApplication', name: 'Visual Algorithms & Von Neumann CPU Lab', url: 'https://www.arkyedu.com/laborator-algoritmi/en/' },
@@ -171,6 +175,10 @@ function buildEnglishIndexHtml(roHtml: string): string {
           <li><a href="/blog/en/">ICT, Coding &amp; AI Study Guides (24 Articles)</a></li>
           <li><a href="/glosar/en/">Computer Science &amp; ICT Glossary (44 Essential Terms)</a></li>
           <li><a href="/sandbox/en/">Live Browser Code Sandbox (C++17, Python 3 &amp; HTML5)</a></li>
+          <li><a href="/arcade/en/">ICT Educational Arcade (30 Retro &amp; Coding Games)</a></li>
+          <li><a href="/duel/en/">1v1 Live Coding Duels Arena (21+ Modes)</a></li>
+          <li><a href="/oras/en/">Arkedo Smart City: Arduino IoT &amp; Robotics Lab</a></li>
+          <li><a href="/profesor/en/">ICT Teacher Portal &amp; Digital Gradebook</a></li>
           <li><a href="/arcade/vice-leonida-gta6/en/">Vice Leonida VI: Cyber Runner Arcade Game</a></li>
           <li><a href="/duel/vice-leonida-1v1/en/">Vice Leonida 1v1: Cyber-Heist Showdown</a></li>
         </ul>

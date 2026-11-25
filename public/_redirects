@@ -27,6 +27,14 @@ http://arkyedu.com/*              https://www.arkyedu.com/:splat   301
 /laborator-ai                     lang=en   /laborator-ai/en/         301!
 /laborator-algoritmi/             lang=en   /laborator-algoritmi/en/  301!
 /laborator-algoritmi              lang=en   /laborator-algoritmi/en/  301!
+/arcade/                          lang=en   /arcade/en/               301!
+/arcade                           lang=en   /arcade/en/               301!
+/duel/                            lang=en   /duel/en/                 301!
+/duel                             lang=en   /duel/en/                 301!
+/profesor/                        lang=en   /profesor/en/             301!
+/profesor                         lang=en   /profesor/en/             301!
+/oras/                            lang=en   /oras/en/                 301!
+/oras                             lang=en   /oras/en/                 301!
 
 # Alias conform specificatiei llmstxt.org (.well-known/llms.txt)
 /.well-known/llms.txt             /llms.txt                           200

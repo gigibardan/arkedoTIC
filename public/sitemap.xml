@@ -1,1472 +1,1991 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.arkyedu.com/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>ArkyEdu — Platformă Gratuită de Educație TIC, Coding &amp; Robotică (V–VIII)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida Open-World GTA 6 Sandbox 2D Educativ</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/en/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.98</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>ArkyEdu – Free Kids ICT, Coding &amp; Arduino Education (Ages 10–15)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida Open-World GTA 6 Educational 2D Sandbox</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/sandbox/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>Sandbox Cod Live C++17, Python 3 &amp; HTML5</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/sandbox/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>ArkyEdu Live Browser Code Sandbox</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.96</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Index Blog &amp; Ghiduri Practice TIC, C++, Excel, AI și Robotică</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.93</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>ArkyEdu ICT, Coding, AI &amp; Robotics Study Guides</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog-llm.txt</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>Glosar Bilingv Informatică &amp; TIC (44 Termeni)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>ArkyEdu Bilingual Computer Science Glossary</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/educatie-tehnologie-copii/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.98</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>Educație Tehnologie &amp; Digitală pentru Copii (10–15 ani)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/clasa-5/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>TIC Clasa a V-a — Hardware, Word &amp; Scratch 3.0</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/clasa-6/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>TIC Clasa a VI-a — PowerPoint, Securitate &amp; Algoritmi</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/clasa-7/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>TIC Clasa a VII-a — C++, Audio-Video &amp; Robotică</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/clasa-8/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>TIC Clasa a VIII-a — Excel, HTML5, C++ &amp; Arduino Smart Home</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/comparatie-scoli-private/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>ArkyEdu vs Școli Private de Coding — 100% Gratuit</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/arcade/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-arcade-duel.jpg</image:loc>
+      <image:title>Arcade Didactic TIC: 30 Jocuri Retro &amp; Vice Leonida</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/arcade/en/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-arcade-duel.jpg</image:loc>
+      <image:title>ICT Educational Arcade: 30 Retro Coding &amp; Tech Games</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/leonida/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.97</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida Open-World Story (GTA 6 Educativ)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-map.jpg</image:loc>
+      <image:title>Harta Statului Leonida — 6 Regiuni Open-World</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-duo.jpg</image:loc>
+      <image:title>Lucia Caminos &amp; Jason Duval — Vice Leonida Tech Missions</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/leonida/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.94</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida Open-World 2D Sandbox (GTA 6 Tech)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/leonida-llm.txt</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/laborator-ai/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.97</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/ai-lab-hero.jpg</image:loc>
+      <image:title>Laborator Interactiv AI &amp; Deepfake ArkyEdu</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/ai-evidence-real.jpg</image:loc>
+      <image:title>Analiză Forensic AI — Fotografie Autentică</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/ai-evidence-fake.jpg</image:loc>
+      <image:title>Analiză Forensic AI — Detecție Artefacte Deepfake</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/laborator-ai/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.94</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/ai-lab-hero.jpg</image:loc>
+      <image:title>Interactive AI &amp; Deepfake Literacy Lab</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/laborator-ai-llm.txt</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/laborator-algoritmi/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.97</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/algo-lab-hero.jpg</image:loc>
+      <image:title>Laborator Vizual Algoritmi, Binar &amp; CPU Von Neumann</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/cpu-von-neumann.jpg</image:loc>
+      <image:title>Arhitectură CPU Von Neumann — Fetch Decode Execute</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/logic-gates-board.jpg</image:loc>
+      <image:title>Porți Logice AND, OR, XOR &amp; Circuit Hardware</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/laborator-algoritmi/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.94</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/algo-lab-hero.jpg</image:loc>
+      <image:title>Visual Algorithms, Binary &amp; Von Neumann CPU Lab</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/laborator-algoritmi-llm.txt</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/arcade/vice-leonida-gta6/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.93</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida VI: Cyber Runner (GTA 6 Arcade)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/arcade/vice-leonida-gta6/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida VI: Cyber Runner English Edition</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/duel/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-arcade-duel.jpg</image:loc>
+      <image:title>Arena Dueluri TIC 1v1 Live &amp; Cyber-Bot</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/duel/en/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-arcade-duel.jpg</image:loc>
+      <image:title>1v1 Live Tech &amp; Coding Duels Arena (21+ Modes)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/duel/vice-leonida-1v1/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.93</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida 1v1: Cyber-Heist Showdown</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/duel/vice-leonida-1v1/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/leonida-hero.jpg</image:loc>
+      <image:title>Vice Leonida 1v1 Showdown English Edition</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/profesor/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>Portal Profesor TIC — Catalog Digital &amp; Bareme 1–10</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/profesor/en/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.86</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>ICT Teacher Portal — Digital Gradebook &amp; Rubrics 1–10</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/oras/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>Arkedo Smart City — Laborator IoT &amp; Robotică Arduino</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.arkyedu.com/oras/en/</loc>
+    <lastmod>2026-11-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.86</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/og-cover.png</image:loc>
+      <image:title>Arkedo Smart City — Arduino IoT &amp; Robotics Lab</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.96</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișe de Lucru, Teste cu Barem 1–10 &amp; Olimpiadă TIC</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Bilingual ICT Worksheets, Exams &amp; Grading Rubrics</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/llms.txt</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/llms-full.txt</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise-llm.txt</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/ai-catalog.json</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-de-lucru-clasa-5-hardware-ram-rom-unitati-masura/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă de Lucru Clasa a V-a: Arhitectura PC, Memorie RAM vs ROM &amp; Unități de Măsură</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-5-hardware-ram-rom-storage-units-worksheet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 5 ICT Worksheet: PC Architecture, RAM vs ROM &amp; Data Storage Units</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-de-lucru-clasa-5-sisteme-operare-arbore-extensii-fisiere/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă de Lucru Clasa a V-a: Sisteme de Operare, Arbore Directoare &amp; Extensii Fișiere</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-5-operating-systems-folder-tree-extensions-worksheet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 5 ICT Worksheet: Operating Systems, Folder Trees &amp; File Extensions</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/test-evaluare-barem-clasa-5-algoritmi-scheme-logice-scratch/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Test de Evaluare cu Barem Clasa a V-a: Algoritmi Liniari, Scheme Logice &amp; Scratch 3.0 (100p)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-5-assessment-algorithms-flowcharts-scratch-rubric/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 5 Graded Test with Rubric: Sequential Algorithms, Flowcharts &amp; Scratch 3.0 (100 pts)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-proiect-clasa-5-referat-word-diacritice-siguranta-internet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Ghid Proiect &amp; Evaluare Clasa a V-a: Referat Corect în Word (Diacritice, A4) &amp; Siguranță Online</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-5-word-document-formatting-https-safety-project/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 5 Project &amp; Rubric: Clean School Report Formatting (A4, Typography) &amp; Online Safety</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-de-lucru-clasa-6-powerpoint-regula-6x6-paint-3d-rgb/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă de Lucru Clasa a VI-a: PowerPoint (Regula 6×6, Tranziții) &amp; Grafică RGB / Paint 3D</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-6-powerpoint-6x6-rule-transitions-rgb-paint3d-worksheet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 6 ICT Worksheet: PowerPoint (6×6 Rule, Transitions) &amp; RGB / 3D Graphics</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/test-cu-barem-clasa-6-securitate-cibernetica-phishing-2fa-email-bcc/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Test Semestrial cu Barem Clasa a VI-a: Securitate Cibernetică, Phishing, 2FA &amp; E-mail CC/BCC (100p)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-6-cybersecurity-phishing-2fa-email-bcc-exam/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 6 Midterm Exam with Rubric: Cybersecurity, Phishing, 2FA &amp; Email CC/BCC (100 pts)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-de-lucru-clasa-6-scratch-daca-altfel-bucle-conditionate-operatori/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă de Lucru Clasa a VI-a: Structura Dacă-Altfel, Operatori Logici &amp; Bucle Condiționate în Scratch</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-6-scratch-if-else-logic-operators-conditional-loops-worksheet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 6 ICT Worksheet: If-Else Decisions, Boolean Operators &amp; Conditional Loops in Scratch</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/evaluare-finala-barem-clasa-6-algoritmi-contor-scratch-netiquette/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Evaluare Finală cu Barem Clasa a VI-a: Algoritmi cu Contor, Clonare &amp; Netichetă (100p)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-6-final-exam-counter-algorithms-clones-netiquette/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 6 Final Exam with Rubric: Counter Algorithms, Clones &amp; Netiquette (100 pts)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-de-lucru-clasa-7-cpp-operatori-modulo-regula-3-pahare/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă de Lucru C++ Clasa a VII-a: Operatori (`/`, `%`) &amp; Regula celor 3 Pahare (cu Trace RAM)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-7-cpp-operators-modulo-swap-three-cups-worksheet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 7 C++ Worksheet: Integer Division (`/`), Modulo (`%`) &amp; 3-Cup Swap (with RAM Trace)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/test-cu-barem-clasa-7-cpp-structura-alternativa-if-else-operatori-logici/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Test cu Barem C++ Clasa a VII-a: Structura Alternativă `if/else` &amp; Operatori Logici (100p)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-7-cpp-if-else-decisions-logical-operators-test/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 7 C++ Exam with Rubric: `if/else` Branching &amp; Logical Operators (`&amp;&amp;`, `||`, `!`) (100 pts)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-oji-clasa-7-cpp-bucle-while-oglindit-palindrom-numar-prim/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă OJI &amp; Evaluare C++ Clasa a VII-a: Bucle `while`, Oglindit, Palindrom &amp; Număr Prim</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-7-olympiad-cpp-while-loops-palindrome-prime-worksheet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 7 ICT Olympiad &amp; Exam Sheet: `while` Loops, Reversed Digits, Palindromes &amp; Primes</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-practica-clasa-7-tehnoredactare-word-audio-wavepad-gis/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă Practică Clasa a VII-a: Tehnoredactare Avansată Word, Acustică WavePad &amp; Hărți GIS</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-7-practical-sheet-word-typography-wavepad-audio-gis-maps/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 7 Practical Sheet: Advanced Word Layout, Digital Audio &amp; GIS Mapping</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-de-lucru-clasa-8-excel-sum-average-if-countif-referinta-absoluta-erori/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă de Lucru Excel Clasa a VIII-a: `SUM`, `AVERAGE`, `IF`, `COUNTIF`, `$A$1` &amp; Erori (`#NAME?`, `#DIV/0!`)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-8-excel-formulas-sum-average-if-countif-absolute-errors-worksheet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 8 Excel Worksheet: `SUM`, `AVERAGE`, `IF`, `COUNTIF`, `$A$1` &amp; Error Debugging</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/subiect-teza-admitere-mate-info-cpp-clasa-8-vectori-sortare-cautare-binara/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Subiect Teză &amp; Admitere Mate-Info C++ Clasa a VIII-a: Vectori 1D, Sortare &amp; Căutare Binară (100p)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-8-cpp-high-school-prep-arrays-sorting-binary-search-exam/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 8 High-School CS Prep Exam with Rubric: 1D Arrays, Sorting &amp; Binary Search (100 pts)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/test-cu-barem-clasa-8-web-design-html5-semantic-css-https/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Test cu Barem Clasa a VIII-a: Anatomia Paginii Web HTML5 Semantică, CSS Flexbox &amp; HTTPS (100p)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-8-html5-semantics-css-flexbox-https-dns-exam/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 8 Web Design Exam with Rubric: Semantic HTML5, CSS &amp; HTTPS/DNS (100 pts)</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/fisa-proiect-clasa-8-arduino-uno-smart-city-senzori-ohm-millis/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Fișă Proiect Smart City Clasa a VIII-a: Arduino Uno, Senzori PIR/HC-SR04/MQ-2, Ohm &amp; `millis()`</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/fise/en/grade-8-arduino-uno-smart-city-iot-sensors-ohms-millis-project/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-worksheets.jpg</image:loc>
+      <image:title>Grade 8 Smart City Project Sheet: Arduino Uno, PIR/HC-SR04/MQ-2 Sensors, Ohm’s Law &amp; `millis()`</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/inteligenta-artificiala-chatgpt-scoala-gimnaziu/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Inteligența Artificială &amp; ChatGPT la școală (V–VIII): Cum folosești AI-ul corect la teme fără plagiat</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/ai-chatgpt-middle-school-homework-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>AI &amp; ChatGPT for Middle School (Grades 5–8): How to Learn Smarter Without Plagiarism</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/erori-cpp-gimnaziu-if-while-algoritmi-cifre/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>C++ pentru gimnaziu (Code::Blocks, clasele VII–VIII): Top 10 erori la if, while și algoritmi pe cifre</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/middle-school-cpp-common-errors-if-while-digits/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Middle School C++ Guide (Grades 7–8): Fixing Top 10 Errors in if, while &amp; Digit Algorithms</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/formule-excel-gimnaziu-sum-average-if-countif-erori/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Excel pe înțelesul elevilor (Clasa a VIII-a): Formulele SUM, AVERAGE, IF, COUNTIF, $A$1 și rezolvarea erorilor</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/excel-formulas-middle-school-sum-if-countif-errors/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Excel Formulas for Middle School (Grade 8): Mastering SUM, AVERAGE, IF, COUNTIF, $A$1 &amp; Error Fixes</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/siguranta-copii-tiktok-roblox-discord-phishing-2fa/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Siguranța copiilor pe TikTok, Roblox, Discord și WhatsApp: Cum oprești scam-urile, phishing-ul și cyberbullying-ul</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/kids-online-safety-tiktok-roblox-discord-phishing/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Kids Online Safety on TikTok, Roblox, Discord &amp; WhatsApp: Stopping Scams, Phishing &amp; Cyberbullying</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/word-google-docs-referate-scolare-diacritice-margini-cuprins/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Cum scrii corect un referat în Word sau Google Docs (V–VII): Diacritice românești, margini, numerotare pagini și cuprins automat</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/word-google-docs-school-reports-margins-headers-pdf/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>How to Format School Reports in Word &amp; Google Docs (Grades 5–7): Margins, Page Numbers, TOC &amp; PDF Export</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/scratch-3-incepatori-coordonate-bucle-variabile-primul-joc/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Scratch 3.0 pentru începători (Clasele V–VI): Coordonatele X/Y, bucle, variabile și primul tău joc în 15 minute</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/scratch-3-beginners-coordinates-loops-variables-first-game/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Scratch 3.0 for Beginners (Grades 5–6): X/Y Coordinates, Loops, Variables &amp; Your First Game in 15 Minutes</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/primul-site-web-clasa-8-html5-https-google-sites/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Primul tău site web în Clasa a VIII-a: Structura HTML5, HTTPS și publicare sigură în Google Sites</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/first-school-website-grade-8-html5-https-google-sites/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Building Your First School Website (Grade 8): Semantic HTML5, HTTPS &amp; Safe Google Sites Publishing</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/proiect-arduino-smart-home-gimnaziu-senzori-millis/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Proiect Smart Home cu Arduino Uno pentru gimnaziu (VII–VIII): Senzori PIR, Ultrasonic HC-SR04, MQ-2 și millis()</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/arduino-smart-home-school-project-sensors-millis/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Arduino Uno Smart Home School Project (Grades 7–8): PIR, HC-SR04 Ultrasonic, MQ-2 &amp; Non-Blocking millis()</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/alegere-laptop-pc-scoala-gimnaziu-ram-ssd-cpu-componente/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Ce laptop sau PC alegi pentru școală în gimnaziu (V–VIII): Procesor, RAM, SSD NVMe, placă video &amp; ergonomie</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/choosing-student-laptop-pc-middle-school-cpu-ram-ssd-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Choosing a Student Laptop or PC for Middle School (Grades 5–8): CPU, RAM, NVMe SSD &amp; Ergonomics</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/prezentari-powerpoint-regula-6x6-modelare-3d-scoala/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Prezentări PowerPoint &amp; Google Slides de nota 10 (Clasa a VI-a): Regula 6×6, contrast, animații și modele 3D</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/powerpoint-6x6-rule-school-presentations-paint-3d-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>A+ PowerPoint &amp; Google Slides Presentations (Grades 5–7): The 6×6 Rule, Contrast, Animations &amp; 3D Models</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/cursuri-programare-copii-gratuit-vs-academii-private-logiscool/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Educație digitală și programare pentru copii în România (10–15 ani): Ghidul părinților 0 lei/an vs. școli private de 5.000 lei/an</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/free-kids-coding-platforms-vs-paid-academies-parents-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Free Kids Coding &amp; Digital Literacy vs. $1,000/Year Private Academies: A Practical Parents’ Guide</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/ghid-profesor-tic-catalog-digital-olimpiada-gimnaziu/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Playbook pentru Profesorul de Informatică și TIC (V–VIII): Laboratoare fără instalare, catalog digital 1–10 &amp; pregătire Olimpiadă</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/ict-teacher-playbook-digital-gradebook-olympiad-prep-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>ICT Teacher Playbook (Grades 5–8): Zero-Install Browser Labs, 1–10 Gradebook &amp; Olympiad Prep</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/deepfake-ai-voice-cloning-detectare-stiri-false-2026/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Deepfake, Voice Cloning &amp; Poze False AI în 2026: Cum recunoști un fals în 30 de secunde și metoda C.R.I.F.</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/deepfake-ai-voice-cloning-detection-guide-2026/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Deepfakes, AI Voice Cloning &amp; Fake Photos in 2026: Spot Fakes in 30 Seconds with C.R.I.F.</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/admitere-liceu-mate-info-olimpiada-oji-cpp-vectori-cautare-binara/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Pregătire OJI &amp; Admitere Mate-Info (VII–VIII): Complexitate O(n)/O(log n), Primalitate O(√n), Vectori de Frecvență &amp; Căutare Binară în C++</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/middle-school-olympiad-cpp-arrays-binary-search-complexity-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Competitive C++ for Grades 7–8 (Olympiad &amp; High-School Prep): Time Complexity, O(√n) Primes, Frequency Arrays &amp; Binary Search</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/sistem-binar-ascii-rgb-porti-logice-arhitectura-von-neumann/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>De la 0 și 1 la Procesor: Sistemul Binar, Codul ASCII, Culorile RGB, Porțile Logice și Arhitectura Von Neumann</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/binary-ascii-rgb-logic-gates-von-neumann-cpu-architecture/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>From 0 and 1 to a Working CPU: Binary, ASCII, RGB Colors, Logic Gates &amp; Von Neumann Architecture</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/cum-functioneaza-llm-tokeni-softmax-halucinatii-ai-scoala/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Cum funcționează ChatGPT și LLM-urile (Tokeni, Softmax &amp; Halucinații AI): Ghid tehnic pe înțelesul elevilor și profesorilor</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/how-llms-work-tokens-softmax-ai-hallucinations-school-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>How ChatGPT &amp; LLMs Really Work (Tokens, Softmax &amp; AI Hallucinations): A Practical Guide for Students &amp; Teachers</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/gta-6-gaming-educativ-vice-leonida-tehnologie-tic-programare/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>GTA 6, Universul Vice Leonida &amp; Tehnologia din spatele jocurilor: Cum transformi pasiunea pentru gaming în Binar, C++, Excel și Robotică</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/gta-6-educational-gaming-vice-leonida-cs-coding-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>GTA 6, Vice Leonida &amp; Game Engineering: How Educational Gaming Teaches Binary, C++, Excel &amp; Robotics</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/python-vs-cpp-pentru-copii-gimnaziu-comparatie-primul-program/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Python vs. C++ pentru copii în gimnaziu și liceu (2026): Pe care îl înveți primul? Sintaxă în paralel, capcane și ghid complet</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/python-vs-cpp-for-kids-middle-school-comparison-first-language/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Python vs. C++ for Kids &amp; Middle Schoolers (2026): Which Should They Learn First? Side-by-Side Code &amp; Roadmap</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/algoritmi-de-sortare-cpp-bubble-selection-insertion-std-sort/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Algoritmi de Sortare în C++ pentru Gimnaziu &amp; Olimpiadă: Bubble Sort, Selection Sort, Insertion Sort &amp; std::sort() explicate pas cu pas</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/cpp-sorting-algorithms-bubble-selection-insertion-std-sort/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>C++ Sorting Algorithms for Middle School &amp; Olympiads: Bubble Sort, Selection Sort, Insertion Sort &amp; std::sort() Explained</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/cum-functioneaza-internetul-ip-dns-tcp-udp-ping-wifi-router/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Cum funcționează Internetul în 2026: IP, DNS, TCP vs. UDP (de ce ai Ping mare în jocuri), Porturi &amp; Wi-Fi 6/7</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/how-the-internet-works-ip-dns-tcp-udp-gaming-ping-wifi-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>How the Internet Works in 2026: IP, DNS, TCP vs. UDP (Why Gaming Ping Spikes), Ports &amp; Wi-Fi 6/7</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/excel-avansat-vlookup-xlookup-sumifs-pivot-grafice-proiecte/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Excel Avansat &amp; Google Sheets (Clasa VIII &amp; Proiecte): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Grafice Smart</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/advanced-excel-vlookup-xlookup-sumifs-pivot-tables-charts-guide/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Advanced Excel &amp; Google Sheets (Grade 8 &amp; Projects): XLOOKUP / VLOOKUP, SUMIFS, Pivot Tables &amp; Smart Charts</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/robotica-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-proiecte/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Robotică &amp; IoT pentru Elevi (2026): Arduino Uno vs. ESP32 vs. Micro:bit, PWM, I2C &amp; 7 Greșeli pe Breadboard</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/robotics-iot-arduino-uno-vs-esp32-microbit-pwm-i2c-projects/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Robotics &amp; IoT for Students (2026): Arduino Uno vs. ESP32 vs. Micro:bit, PWM, I2C &amp; 7 Breadboard Mistakes</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/passkeys-fido2-manager-parole-scam-discord-steam-backup-321/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Passkeys (FIDO2), Manageri de Parole, Scam-uri Discord/Steam &amp; Backup 3-2-1: Ghid Complet de Securitate Digitală 2026</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/passkeys-fido2-password-managers-discord-steam-scams-backup-321/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Passkeys (FIDO2), Password Managers, Discord/Steam Scams &amp; 3-2-1 Backups: The Complete 2026 Security Guide</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/competente-digitale-agenti-ai-rag-cariere-viitor-elevi-2026/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Competențe Digitale, Agenți AI, RAG &amp; Carierele Viitorului (2026–2030): Cum pregătești un elev de gimnaziu să nu fie înlocuit de AI</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/blog/en/digital-skills-ai-agents-rag-future-tech-careers-students-2026/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
+    <image:image>
+      <image:loc>https://www.arkyedu.com/assets/og-blog.jpg</image:loc>
+      <image:title>Digital Literacy, AI Agents, RAG &amp; Future Tech Careers (2026–2030): Preparing Students to Lead AI Instead of Being Replaced</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/procesor-cpu/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/cpu-processor/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/memorie-ram/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/ram-memory/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/ssd-vs-hdd/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/ssd-vs-hdd/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/bit-si-byte-octet/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/bit-and-byte/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/dispozitive-periferice/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/peripherals-io/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/sistem-de-operare/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/operating-system/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/arbore-fisiere-cale-acces/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/file-tree-path/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/extensie-fisier/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/file-extension/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/algoritm-proprietati/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/algorithm-definition/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/variabila-tipuri-date-cpp/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/variable-data-types/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/operatorul-modulo-si-impartirea-intreaga/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/modulo-integer-division/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/atribuire-vs-egalitate-cpp/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/assignment-vs-equality/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/structura-alternativa-if-else-switch/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/if-else-switch/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/bucla-while-vs-do-while-cpp/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/while-vs-dowhile/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/bucla-for-cu-contor-cpp/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/for-loop-counter/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/vector-tablou-unidimensional-cpp/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/cpp-array-vector/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/coordonate-xy-sprite-scratch/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/scratch-coordinates-xy/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/regula-celor-3-pahare-interschimbare/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/three-cups-swap/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/celula-domeniu-referinta-absoluta-excel/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/excel-cell-range-absolute/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/functii-excel-sum-average-min-max/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/excel-sum-average/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/functiile-if-si-countif-excel/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/excel-if-countif/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/erori-excel-name-value-div0-ref/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/excel-errors-name-value-div0/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/regula-6x6-prezentari-powerpoint/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/powerpoint-6x6-contrast/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/formatare-document-word-diacritice-margini-stiluri/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/typography-diacritics-margins/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/pixel-rezolutie-model-culoare-rgb/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/rgb-pixel-resolution/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/etichete-html5-semantice/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/html5-semantics/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/protocol-http-vs-https-ssl-tls/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/http-vs-https-ssl/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/adresa-ip-si-server-dns/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/ip-address-dns/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/phishing-inginerie-sociala/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/phishing-social-engineering/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/malware-troian-ransomware/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/malware-cybersecurity/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/autentificare-doi-pasi-2fa/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/two-factor-auth-2fa/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/neticheta-email-to-cc-bcc/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/netiquette-to-cc-bcc/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/cyberbullying-siguranta-online-119/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/cyberbullying-119/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/placa-arduino-uno-setup-loop/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/arduino-uno/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/pini-digitali-analogici-pwm-arduino/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/digital-analog-pwm-pins/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/legea-lui-ohm-rezistor-protectie-led/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/ohms-law-resistor/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/senzor-ultrasonic-hc-sr04-distanta/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/ultrasonic-hc-sr04/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/senzori-smart-home-pir-mq2-dht11/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/pir-and-mq2-sensors/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/functia-millis-vs-delay-arduino/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/arduino-millis/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/inteligenta-artificiala-llm-halucinatii/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/llm-and-ai-hallucinations/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/inginerie-prompturi-metoda-rccl/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/prompt-engineering-rccl/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/cloud-computing-colaborare-online/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/cloud-computing-collaboration/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/harti-digitale-gis-coordonate-gps/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/gis-digital-maps/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/editare-audio-video-timeline-fps-keyframe/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/glosar/en/audio-video-multitrack-keyframe/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.86</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/hardware/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/fisiere-so/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/internet-siguranta/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/editoare-text/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/algoritmi/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/scratch/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/prezentari-slides/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/paint-3d/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/malware-securitate/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/prezentari-slides-2/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/email-neticheta/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/algoritmi-bucle-scratch-1/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/animatie-vr-toontastic-cospaces/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/algoritmi-contor-minecraft-scratch/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_word_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_word_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_audio_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_video_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_cloud_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_gis_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_cpp_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_cpp_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_decision_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_loop_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_stem_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g7_robot_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_calc_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_calc_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_calc_c/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_calc_d/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_web_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_web_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_web_c/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_algo_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_algo_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_algo_c/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_algo_d/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_algo_e/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_robot_a/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.arkyedu.com/cursuri/g8_robot_b/</loc>
-    <lastmod>2026-11-22</lastmod>
+    <lastmod>2026-11-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

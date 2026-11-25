@@ -173,15 +173,16 @@ export async function updateDynamicSeo(
     hreflangXDefaultUrl = null;
   } else if (view === 'teacher') {
     title = isEn
-      ? 'Teacher Portal & Digital Gradebook | ArkyEdu ICT'
+      ? 'ICT Teacher Portal: Digital Gradebook, Rubrics 1–10 & Auto-Grading | ArkyEdu'
       : 'Portal Profesor TIC: Catalog Digital & Bareme 1–10 | ArkyEdu';
     description = isEn
       ? 'Digital gradebook, curriculum sheets, automated scoring (1-10) and GDPR-compliant class management for ICT & Computer Science teachers.'
       : 'Instrument gratuit pentru profesorii de TIC: catalog digital, evaluare automată pe bareme 1–10, export condică și fișe conforme programei naționale.';
-    canonicalUrl = `${BASE_URL}/profesor/`;
-    hreflangRoUrl = canonicalUrl;
-    hreflangEnUrl = null;
-    hreflangXDefaultUrl = canonicalUrl;
+    hreflangRoUrl = `${BASE_URL}/profesor/`;
+    hreflangEnUrl = `${BASE_URL}/profesor/en/`;
+    hreflangXDefaultUrl = hreflangRoUrl;
+    canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+    hasPairedEnRoute = true;
   } else if (view === 'arcade') {
     if (arcadeGame === 'vice_leonida') {
       title = isEn
@@ -245,10 +246,11 @@ export async function updateDynamicSeo(
       description = isEn
         ? 'Play 30 free educational retro & open-world games: Vice Leonida Open-World (GTA 6), Cyber Runner, Cyber Pac-Man, Arkanoid, Frogger, Sokoban & PC Builder.'
         : '30 mini-jocuri arcade gratuite pentru educație digitală: Vice Leonida Open-World (GTA 6), Cyber Runner, Pac-Man, Arkanoid, Frogger, Sokoban & PC Builder.';
-      canonicalUrl = `${BASE_URL}/arcade/`;
-      hreflangRoUrl = canonicalUrl;
-      hreflangEnUrl = null;
-      hreflangXDefaultUrl = canonicalUrl;
+      hreflangRoUrl = `${BASE_URL}/arcade/`;
+      hreflangEnUrl = `${BASE_URL}/arcade/en/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+      hasPairedEnRoute = true;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
@@ -256,7 +258,7 @@ export async function updateDynamicSeo(
         description,
         url: canonicalUrl,
         image: `${BASE_URL}/assets/og-arcade-duel.jpg`,
-        inLanguage: ['ro', 'en'],
+        inLanguage: isEn ? 'en' : 'ro',
       };
     }
   } else if (view === 'duel') {
@@ -314,10 +316,11 @@ export async function updateDynamicSeo(
       description = isEn
         ? 'Compete live 1v1 in Vice Leonida 1v1 (GTA 6), Cyber Battleship, File-Drop Attack Tetris, System Sabotage, C++ Code Racer, Binary Clash & Circuit Duel.'
         : 'Confruntări live 1v1 pentru elevi: Vice Leonida 1v1 (GTA 6), Cyber Battleship, File-Drop Attack, System Sabotage, C++ Code Racer, Binary Clash și Circuit Clash.';
-      canonicalUrl = `${BASE_URL}/duel/`;
-      hreflangRoUrl = canonicalUrl;
-      hreflangEnUrl = null;
-      hreflangXDefaultUrl = canonicalUrl;
+      hreflangRoUrl = `${BASE_URL}/duel/`;
+      hreflangEnUrl = `${BASE_URL}/duel/en/`;
+      hreflangXDefaultUrl = hreflangRoUrl;
+      canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+      hasPairedEnRoute = true;
       dynamicJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
@@ -325,20 +328,21 @@ export async function updateDynamicSeo(
         description,
         url: canonicalUrl,
         image: `${BASE_URL}/assets/og-arcade-duel.jpg`,
-        inLanguage: ['ro', 'en'],
+        inLanguage: isEn ? 'en' : 'ro',
       };
     }
   } else if (view === 'city') {
     title = isEn
-      ? 'Arkedo Smart City: Arduino IoT & Robotics Lab | ArkyEdu'
+      ? 'Arkedo Smart City: Interactive Arduino IoT & Robotics Lab | ArkyEdu'
       : 'Arkedo Smart City: Laborator IoT & Robotică Arduino | ArkyEdu';
     description = isEn
       ? 'Interactive Smart City & IoT robotics lab: PWM smart lighting, ultrasonic barriers, MQ-2 gas alerts, and Arduino Uno sensors in your browser.'
       : 'Simulator interactiv Smart City IoT pentru gimnaziu: iluminat PWM, senzori ultrasonici HC-SR04, alarmă gaz MQ-2 și microcontroller Arduino Uno.';
-    canonicalUrl = `${BASE_URL}/oras/`;
-    hreflangRoUrl = canonicalUrl;
-    hreflangEnUrl = null;
-    hreflangXDefaultUrl = canonicalUrl;
+    hreflangRoUrl = `${BASE_URL}/oras/`;
+    hreflangEnUrl = `${BASE_URL}/oras/en/`;
+    hreflangXDefaultUrl = hreflangRoUrl;
+    canonicalUrl = isEn ? hreflangEnUrl : hreflangRoUrl;
+    hasPairedEnRoute = true;
   } else if (view === 'blog') {
     const { findBlogArticleBySlug } = await import('../data/blog');
     if (requestToken !== activeSeoRequestToken) return;

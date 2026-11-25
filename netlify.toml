@@ -139,6 +139,62 @@
   force = true
   query = { lang = "en" }
 
+[[redirects]]
+  from = "/arcade/"
+  to = "/arcade/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/arcade"
+  to = "/arcade/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/duel/"
+  to = "/duel/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/duel"
+  to = "/duel/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/profesor/"
+  to = "/profesor/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/profesor"
+  to = "/profesor/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/oras/"
+  to = "/oras/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
+[[redirects]]
+  from = "/oras"
+  to = "/oras/en/"
+  status = 301
+  force = true
+  query = { lang = "en" }
+
 # Alias conform specificatiei llmstxt.org (.well-known/llms.txt)
 [[redirects]]
   from = "/.well-known/llms.txt"

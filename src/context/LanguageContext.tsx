@@ -26,7 +26,7 @@ export function detectLanguageFromLocation(): Language | null {
 
   if (
     /^\/en(\/|$)/i.test(pathname) ||
-    /^\/(blog|glosar|fise|sandbox|leonida|laborator-ai|laborator-algoritmi)\/en(\/|$)/i.test(pathname) ||
+    /^\/(blog|glosar|fise|sandbox|leonida|laborator-ai|laborator-algoritmi|arcade|duel|oras|profesor|city)\/en(\/|$)/i.test(pathname) ||
     /^\/(arcade\/vice-leonida-gta6|duel\/vice-leonida-1v1)\/en(\/|$)/i.test(pathname)
   ) {
     return 'en';
@@ -44,7 +44,7 @@ export function detectLanguageFromLocation(): Language | null {
   if (
     pathname === '/' ||
     pathname === '/index.html' ||
-    /^\/(blog|glosar|fise|sandbox|leonida|laborator-ai|laborator-algoritmi)(\/|$)/i.test(pathname)
+    /^\/(blog|glosar|fise|sandbox|leonida|laborator-ai|laborator-algoritmi|arcade|duel|oras|profesor|city)(\/|$)/i.test(pathname)
   ) {
     return 'ro';
   }
